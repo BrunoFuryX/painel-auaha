@@ -1,0 +1,69 @@
+.login
+    display flex
+    flex 1
+    flex-direction column
+    justify-content center
+    align-items center
+    scroll-behavior: smooth;
+    min-height: 100vh
+    &__container
+        padding: 75px 35px 50px
+        box-shadow: var(--sombra)
+        border-radius: 10px
+        background: var(--bgInner)
+        text-align: center
+        display: flex
+        flex-direction: column
+        justify-content: center
+        align-items: center
+        color: var(--texto)
+        max-width: 100%
+        box-sizing:border-box
+
+        svg
+            margin-bottom: 20px
+        form
+            display: flex
+            flex-direction: column
+            justify-content: center
+            align-items: center
+            width: 311px
+            max-width: calc(100vw - 80px)
+            gap: 15px
+            margin-top: 15px
+            span
+                color: var(--vermelho)
+        input
+            width: 100%
+            height: 40px
+            max-width: 311px
+            padding: 0 15px
+            border: 0
+            border-radius: 5px
+            background: var(--bg)
+            color: var(--texto)
+            font-size: 14px
+            font-weight: 400
+            letter-spacing: .2px
+            line-height: 18px
+        button
+            width: 100%
+            height: 40px
+            max-width: 311px
+            padding: 0 15px
+
+            border: 0
+
+            border-radius: 5px
+
+            background: var(--verde)
+            color: #000
+            font-size: 16px
+            font-weight: 700
+            letter-spacing: .2px
+            line-height: 18px
+            text-transform: uppercase
+            cursor pointer
+            transition: .3s
+            &:hover
+                box-shadow: 0 0 5px var(--verde)

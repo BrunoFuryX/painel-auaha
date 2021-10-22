@@ -1,0 +1,112 @@
+
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+h1,h2,h3,h4,h5,h6
+    margin: 0
+button
+    font-size: 16px
+    font-weight: 700
+    letter-spacing: .2px
+    border: 0
+    border-radius: 5px
+    cursor pointer
+ul
+    margin: 0
+    list-style: none
+    padding: 0
+
+*
+    transition: .3s
+html,
+body
+    margin: 0
+    padding: 0
+    font-family: 'Montserrat', sans-serif
+    letter-spacing: .2px
+
+
+main
+    min-height: 100vh
+    display: flex
+.body
+    width: 100%
+    display: flex
+    flex-direction: column
+    width: 100%
+button 
+    padding 0
+
+
+input
+    box-sizing:border-box
+    &:focus-visible
+    &:focus
+    &:focus-within
+        outline: none
+    &:-webkit-autofill,
+    &:-webkit-autofill:hover,
+    &:-webkit-autofill:focus,
+    &:-webkit-autofill:active 
+        transition: all 5000s ease-in-out 0s;
+
+    
+verdeAuaha = #4CFFDE
+vermelho = #FF4C34
+bgMenu= #121212
+
+main
+    --bgMenu: bgMenu;
+    --vermelho: vermelho;
+    --verdeAuaha: verdeAuaha;
+
+.dark
+    bg = #1E1F23
+    bgInner = #27292D
+    bgInnerInner =#1E1F23
+    sombra = 0 2px 10px #00000044
+    verde = #4CFFDE
+    texto = #fff
+
+    --bg: bg;
+    --bgInner: bgInner;
+    --bgInner: bgInner;
+    --sombra: sombra;
+    --verde: verde;
+    --texto: texto;
+
+
+.light
+    bg = #FFFFFF
+    bgInner = #F5F5F5
+    bgInnerInner = #EEEEEE
+    sombra = 0 2px 10px #00000020
+    verde = #23B297
+    texto = #000000
+    
+    --bg: bg;
+    --bgInner: bgInner;
+    --bgInner: bgInner;
+    --sombra: sombra;
+    --verde: verde;
+    --texto: texto;
+
+
+.dark,
+.light
+    background: var(--bg)
+
+.listatemas::-webkit-scrollbar-track
+	border-radius: 10px;
+	background-color: bgInner;
+
+
+.listatemas::-webkit-scrollbar
+	width: 12px;
+	background-color: bgInner;
+
+
+.listatemas::-webkit-scrollbar-thumb
+	border-radius: 10px;
+	background-color: verde;
+

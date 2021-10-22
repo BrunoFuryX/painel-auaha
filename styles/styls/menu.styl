@@ -1,0 +1,71 @@
+.menu
+
+    background: var(--bgMenu)
+    height: 100vh
+    transition: .3s
+    &__logo
+        margin-left: 18px
+        padding-top: 25px
+        width: 64px
+        height: 25px
+        display: block
+        margin-bottom: 40px
+    ul
+        padding-right: 23px
+    button.menu__item
+        appearance none
+        display: flex
+        align-items: center
+        gap 10px
+        color: #fff
+        font-size: 0
+        font-weight: 500
+        letter-spacing: .2px
+        line-height: 18px
+        text-decoration: none
+        border: 0
+        flex-grow: 1
+        background: transparent
+        cursor: pointer
+        > div
+            width: 25px
+            display: flex
+            justify-content: flex-start
+
+    &__item
+        min-width: 60px
+        padding-left: 40px
+        height: 54px
+        display: flex
+        align-items: center
+        transition-delay: .3s
+        a
+            display: flex
+            align-items: center
+            gap 10px
+            color: #fff
+            font-size: 0
+            font-weight: 500
+            letter-spacing: .2px
+            line-height: 18px
+            text-decoration: none
+            transition: .3s
+
+            > div
+                width: 25px
+                display: flex
+                justify-content: flex-start
+        &.selected
+            border-left: 2px solid #4CFFDE
+    &.close
+        width: 100%
+        max-width: 100px
+        
+    &.hover
+    &.active
+        width: 100%
+        max-width: 260px
+        .menu__item
+            font-size: 14px
+            a
+                font-size: 14px
