@@ -1,8 +1,11 @@
 .menu
-
     background: var(--bgMenu)
-    height: 100vh
     transition: .3s
+
+    &__container
+        position fixed
+        top 0
+        left: 0
     &__logo
         margin-left: 18px
         padding-top: 25px
@@ -18,7 +21,7 @@
         align-items: center
         gap 10px
         color: #fff
-        font-size: 0
+        font-size: 0px
         font-weight: 500
         letter-spacing: .2px
         line-height: 18px
@@ -27,6 +30,8 @@
         flex-grow: 1
         background: transparent
         cursor: pointer
+        position: fixed
+        bottom: 20px
         > div
             width: 25px
             display: flex
@@ -38,13 +43,13 @@
         height: 54px
         display: flex
         align-items: center
-        transition-delay: .3s
+
         a
             display: flex
             align-items: center
             gap 10px
             color: #fff
-            font-size: 0
+            font-size: 0px
             font-weight: 500
             letter-spacing: .2px
             line-height: 18px
@@ -61,7 +66,7 @@
         width: 100%
         max-width: 100px
         
-    &.hover
+    &:hover
     &.active
         width: 100%
         max-width: 260px

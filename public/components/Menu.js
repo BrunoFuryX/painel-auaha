@@ -29,14 +29,6 @@ export default function Menu(props) {
     const [menu, setMenu] = useState("close")
     const [menuActive, setMenuActive] = useState(false)
 
-    $('.menu').on('mouseenter', e => {
-      setMenu("hover")
-    });
-    
-    $('.menu').on('mouseleave', e => {
-      setMenu("close")
-    });
-    
     const LogoAuahaSvg = (props) => {
         return(
           <svg xmlns="http://www.w3.org/2000/svg" width="63.12" height="24.51" viewBox="0 0 149.391 58.008" fill={ "#fff" }>
@@ -121,9 +113,13 @@ export default function Menu(props) {
 
     return (<>
         <div className={ "menu " + (menu) + (menuActive ? " active" : "") }>
-          <Logo/>
-          <Navigator />
-          <Expand />
+          <div className={ "menu__container" }>
+
+            <Logo/>
+            <Navigator />
+            <Expand />
+          </div>
+
         </div>
     </>);
 }

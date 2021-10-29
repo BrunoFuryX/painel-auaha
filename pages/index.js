@@ -3,18 +3,32 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 
+import { getRecentUsers } from '/public/services/usuarios';
+import { getRecentStores } from '/public/services/lojas';
+
+
+
 import sair from "/public/images/sair.svg"
 
 export default function Home(props) {
   const user = props.user
   const [dark, setDark] = useState(props.dark)
 
+  const [usersList, setUsersList] = useState([])
+  const [storesList, setStoresList] = useState([])
+
+
+  useEffect(() => {
+    getRecentUsers(user.store).then(response => setUsersList(response))
+    getRecentStores().then(response => setStoresList(response))
+  },[])
+
 
   const DashboardItem = (props) => {
     const lista = props.lista
-    const listafeita = lista.map((nome) => {
+    const listafeita = lista.map((item) => {
       return(
-        <div key={nome} >{nome}</div> 
+        <div key={item.id} >{item.info}</div> 
       )
     })
     console.log(lista)
@@ -63,9 +77,9 @@ export default function Home(props) {
       <div className={ "dashboard" }>
         <div className={ "dashboard__list" }>
 
-          <DashboardItem titulo={ "Últimos Usuários" } lista={ ["Hugo Akio", "Bruno Lopes", "Hugo Akio", "Akio master"] } link={ "/usuarios" }/>
+          <DashboardItem titulo={ "Últimos Usuários" } lista={ usersList } link={ "/usuarios" }/>
 
-          <DashboardItem titulo={ "Últimas Lojas" } lista={ ["Loja 01", "Loja 02", "Loja 03", "Loja 04"] } link={ "/lojas" }/>
+          <DashboardItem titulo={ "Últimas Lojas" } lista={ storesList } link={ "/lojas" }/>
 
           <DashboardItem titulo={ "Últimos Logs" } lista={ ["Usuário 01 modificou o arquivo x", "Login de Usuário 01", "Usuário 01 modificou o arquivo x", "Login de Usuário 01"] } link={ "/logs" }/>
 

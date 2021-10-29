@@ -11,28 +11,143 @@
     
     &__list
         &-header
-            padding-top: 20px
-            font-size: 18px;
-            font-weight: 600;
-            letter-spacing: .2px;
-            line-height: 20px;
-            color: var(--verde);
-            text-align: center
-            @media (min-width 991px)
-                display: none
+            display: none
+            
+            @media (max-width 991px)
+                display: block
+                padding-top: 20px
+                padding-bottom: 20px
+                font-size: 18px;
+                font-weight: 600;
+                letter-spacing: .2px;
+                line-height: 20px;
+                color: var(--verde);
+                text-align: center
         &-body
             .topo
+                padding: 15px
                 display: flex
                 justify-content: space-between
+                font-size: 16px
+                color: var(--texto)
+                font-weight: 700
+                letter-spacing: .2px
+                margin: 0 10px 0 0;
+                @media (max-width 991px)
+                    display: none
+                >div
+                    overflow: hidden
+                    &.id
+                        width: 13%
+                    &.acoes
+                        width: 7%
+                    
+                    &.nome
+                        width: 24%
+                    &.email
+                        width: 24%
+                    &.loja
+                        width: 12%
+                    &.nivel
+                        width: 20%
 
-            .item
-                display: flex
-                justify-content: space-between 
+                    &.name
+                        width: 10%
+                    &.responsavel
+                        width: 10%
+                    &.url
+                        width: 20%
+                    &.contato
+                        width: 10%
+                    &.plataforma
+                        width: 10%
+
+                    &.productId
+                        width: 18%
+                    &.image1
+                        width: 15%
+                    &.image2
+                        width: 15%
+                    
+
+            .corpo
+                
+                @media (max-width 991px)
+                    display: flex
+                    flex-direction: column
+                    gap: 20px
+                .item
+                    display: flex
+                    justify-content: space-between 
+                    font-size: 13px
+                    color: var(--texto)
+                    font-weight: 500
+                    letter-spacing: .2px
+                    padding: 0 15px
+                    @media (max-width 991px)
+                        flex-direction: column
+                    >div
+                        white-space: nowrap;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        height: 50px
+                        display: flex
+                        align-items: center
+                        margin: 0 10px 0 0 
+                        a
+                            color: var(--verde)
+                            font-size: 13px
+                            font-weight: 500
+                            letter-spacing: .2px
+                        @media (max-width 991px)
+                            width: 100% !important
+                        
+                        &.id
+                            width: 13%
+                        &.acoes
+                            width: 7%
+                        
+                        &.nome
+                            width: 24%
+                        &.email
+                            width: 24%
+                        &.loja
+                            width: 12%
+                        &.nivel
+                            width: 20%
+
+                        &.name
+                            width: 10%
+                        &.responsavel
+                            width: 10%
+                        &.url
+                            width: 20%
+                        &.contato
+                            width: 10%
+                        &.plataforma
+                            width: 10%
+
+                        &.productId
+                            width: 18%
+                        &.image1
+                            width: 15%
+                        &.image2
+                            width: 15%
+                    @media (min-width 991px)
+                        b
+                            display: none
+                    @media (max-width 991px)
+                        background: var(--bgInner)
+                        border-radius: 5px
+                    &:nth-child(2n + 1)
+                        background: var(--bgInner)
+                        border-radius: 5px
     &__header
         max-width: 705px
         width: 100%
         display: flex
         border-radius: 5px
+        padding-bottom: 15px
         height: 50px
         position: relative
         margin-left: auto;
@@ -68,3 +183,19 @@
                 margin-top: 5px
                 fill: var(--verde)
             
+
+
+.acoes
+    display: flex
+    gap: 10px
+    align-items: center
+    .editar
+        font-size: 14px
+        letter-spacing: .2px
+        color: var(--verde)
+        text-decoration: underline
+        background: transparent
+        border 0
+    .excluir
+        background: transparent
+        border 0

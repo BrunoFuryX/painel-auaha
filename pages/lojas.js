@@ -2,23 +2,35 @@ import Head from 'next/head'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
-import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
+import $ from 'jquery';
+
 
 import sair from "/public/images/sair.svg"
 import { async } from '@firebase/util';
 
-export default function Usuarios(props) {
+export default function Lojas(props) {
   const user = props.user
   const [dark, setDark] = useState(props.dark)
 
-  const [ id, setId] = useState("")
-  const [ name, setName] = useState("")
-  const [ email, setEmail] = useState("")
-  const [ password, setPassword] = useState("")
-  const [ lvl, setLvl] = useState("Usuario")
-  const [ store, setStore] = useState("")
-
+  const [ form, setForm] = useState({
+    "id": "",
+    "StoreName": "",
+    "StoreID": "",
+    "StoreManager": "",
+    "StoreContactMail": "",
+    "StoreContactPhone": "",
+    "StorePayDay": "",
+    "StoreURL": "",
+    "StorePlataform": "Tray",
+    "accessKey": "",
+    "apiKey": "",
+    "secretKey": "",
+    "UploadPhotos": "",
+    "UploadFiles": "",
+    "MeasurementChart": "",
+    "CustomCase": "",
+  })
   const [ search, setSearch] = useState("")
   const [ searchCampo, setSearchCampo] = useState(false)
 
@@ -30,37 +42,19 @@ export default function Usuarios(props) {
 
   const [ x, setX] = useState("waiting")
 
-  const [lojas, setLojas] = useState([])
-
   const [ lista, setLista] = useState([])
 
   useEffect( ()=>{
-    getUsers().then((response) => {
-      setTimeout(() => {
-        setLista(response)
-      }, 500);
-    })
-
     getStores().then((response) => {
       setTimeout(() => {
-        setLojas(response)
-        console.log(lojas)
-
+        setLista(response)
       }, 500);
     })
   },[])
 
   function Buscar(){
-    getStores().then((response) => {
-      setTimeout(() => {
-        setLojas(response)
-        console.log(lojas)
-
-      }, 500);
-    })
-
     if(searchCampo && search){
-      getUsersbyWhere(searchCampo, search).then( (response) => {
+      getStoresbyWhere(searchCampo, search).then( (response) => {
         setTimeout(() => {
 
           setLista(response)
@@ -68,7 +62,7 @@ export default function Usuarios(props) {
 
       })
     }else{
-      getUsers().then( (response) => {
+      getStores().then( (response) => {
         setTimeout(() => {
 
         setLista(response)
@@ -91,29 +85,41 @@ export default function Usuarios(props) {
               </b>
               { item.id}
             </div>
-            <div className={ "nome" }>
+            <div className={ "name" }>
               <b>
                 Nome:
               </b>
-              { item.name}
+              { item.StoreName}
+            </div>
+            <div className={ "responsavel" }>
+              <b>
+                Responsavel:
+              </b>
+              { item.StoreManager}
+            </div>
+            <div className={ "url" }>
+              <b>
+                URL:
+              </b>
+              { item.StoreURL}
             </div>
             <div className={ "email" }>
               <b>
-                E-mail:
+              E-mail:
               </b>
-              { item.email}
+              { item.StoreContactMail}
             </div>
-            <div className={ "loja" }>
+            <div className={ "contato" }>
               <b>
-                Loja:
+              Contato:
               </b>
-              { item.store}
+              { item.StoreContactPhone}
             </div>
-            <div className={ "nivel" }>
+            <div className={ "plataforma" }>
               <b>
-                Nivel de Acesso:
+              Plataforma:
               </b>
-              { item.lvl}
+              { item.StorePlataform}
             </div>
             <div className={ "acoes" }>
               <b>
@@ -147,24 +153,34 @@ export default function Usuarios(props) {
               ID
             </div>
           </div>
-          <div className={ "nome" }>
+          <div className={ "name" }>
             <div>
               Nome
             </div>
           </div>
+          <div className={ "responsavel" }>
+            <div>
+            Responsavel
+            </div>
+          </div>
+          <div className={ "url" }>
+            <div>
+            URL
+            </div>
+          </div>
           <div className={ "email" }>
             <div>
-              E-mail
+            E-mail
             </div>
           </div>
-          <div className={ "loja" }>
+          <div className={ "contato" }>
             <div>
-              Loja
+            Contato
             </div>
           </div>
-          <div className={ "nivel" }>
+          <div className={ "plataforma" }>
             <div>
-              Nivel de Acesso
+            Plataforma
             </div>
           </div>
           <div className={ "acoes" }>
@@ -180,42 +196,54 @@ export default function Usuarios(props) {
     )
   }
 
-  
-
-  function Editar(id){
-    getUserbyId(id).then(response => {
-      setId(id)
-      setEmail(response.email)
-      setLvl(response.lvl)
-      setName(response.name)
-      setStore(response.store)
-      setPassword(response.password)
-      setButton("Salvar")
-
+  const Editar = (id) => {
+    var id = id
+    
+    setForm({
+      "id": "",
+      "StoreName": "",
+      "StoreID": "",
+      "StoreManager": "",
+      "StoreContactMail": "",
+      "StoreContactPhone": "",
+      "StorePayDay": "",
+      "StoreURL": "",
+      "StorePlataform": "Tray",
+      "accessKey": "",
+      "apiKey": "",
+      "secretKey": "",
+      "UploadPhotos": "",
+      "UploadFiles": "",
+      "MeasurementChart": "",
+      "CustomCase": "",
     })
-  }
+
+
+    getStorebyId(id).then(response => {
+      let resposta = response
+      setForm({
+          ...resposta,
+          id: id
+      })
+    })
+    
+    setButton("Salvar")
+};
+
   function Excluir(id){
     setMsg(`Registro ${id} será excluido, deseja continuar?`)
     setConfirm(true)
     setPreview(false)
     setX(id)
-    console.log("foi")
   }
     
   function enviarForm(e) {
     e.preventDefault();
 
-    const data = {
-      id,
-      name,
-      email,
-      password,
-      lvl,
-      store
-    }
+    const data = form
 
-    if(id){
-      setMsg(`Registro ${id} editado com sucesso`)
+    if(form.id){
+      setMsg(`Registro ${form.id} editado com sucesso`)
       setConfirm(false)
       setPreview(false)
 
@@ -226,26 +254,65 @@ export default function Usuarios(props) {
 
     }
 
-    setUser(data)
+    setStore(data)
 
-    setId("")
-    setName("")
-    setEmail("")
-    setPassword("")
-    setLvl("Usuario")
-    setStore("")
-    setButton("Adicionar")
+    setForm({
+      "id": "",
+      "StoreName": "",
+      "StoreID": "",
+      "StoreManager": "",
+      "StoreContactMail": "",
+      "StoreContactPhone": "",
+      "StorePayDay": "",
+      "StoreURL": "",
+      "StorePlataform": "Tray",
+      "accessKey": "",
+      "apiKey": "",
+      "secretKey": "",
+      "UploadPhotos": "",
+      "UploadFiles": "",
+      "MeasurementChart": "",
+      "CustomCase": "",
+    })
 
     Buscar()
   }
 
+  const handleChange = (e) => {
+    const value = e.target.value;
+    const name = e.target.name;
 
+    setForm(prevState => ({
+        ...prevState,
+        [name]: value
+    }));
+  };
+
+
+  const handleChangeCheckbox = (e) => {
+    const value = e.target.checked;
+    const name = e.target.name;
+
+    setForm(prevState => ({
+        ...prevState,
+        [name]: value
+    }));
+  };
+
+  function FormatDate(e){
+    var v = e.target.value; 
+    if (v.match(/^\d{2}$/) !== null) {
+      e.target.value = v + '/';
+    } else if (v.match(/^\d{2}\/\d{2}$/) !== null) {
+      e.target.value = v + '/';
+    }
+  }
 
   return (
     <>
       <header>
         <h2>
-          Usuários
+          Lojas
         </h2>
         <div>
           <div className={"customer"}>
@@ -270,28 +337,61 @@ export default function Usuarios(props) {
       </header>
       <div className={ "painel" }>
         <div className={ "cadastro" }>
-          <div className={ "cadastro__container" }>
+          <div className={ "cadastro__container lojas" }>
               <h3>
-                Adicionar novos usuários
+                Adicionar novos lojas
               </h3>
               <form onSubmit={ e => enviarForm(e) }>
-                  <input type="hidden" name={ "id" } value={ id }/>
-                  <input name={ "name" } value={ name }  placeholder={ "Nome" }  onChange={(e) => setName(e.target.value)}/>
-                  <input name={ "email" } value={ email }  placeholder={ "E-mail" }  onChange={(e) => setEmail(e.target.value)}/>
-                  <input type="password" name={ "password" }  placeholder={ "Senha" }  value={ password } onChange={(e) => setPassword(e.target.value)} />
-                  <select name={ "lvl" } value={ lvl } onChange={(e) => setLvl(e.target.value)} >
-                    <option value={ "Usuario" }>Usuario</option>
-                    <option value={ "Gerente" }>Gerente</option>
-                    <option value={ "Admin" }>Admin</option>
-                    <option value={ "Master" }>Master</option>
+                  <input type="hidden" name={ "id" } value={ form.id }/>
+                  <input name={ "StoreName" } value={ form.StoreName }  placeholder={ "Nome" }  onChange={handleChange}/>
+                  <input name={ "StoreID" } value={ form.StoreID }  placeholder={ "Id na Plataforma" }  onChange={handleChange}/>
+                  <input name={ "StoreManager" } value={ form.StoreManager } placeholder={ "Gerente da Loja" }  onChange={handleChange} />
+                  <input name={ "StoreContactMail" } value={ form.StoreContactMail } placeholder={ "E-mail de Contato" }  onChange={handleChange} />
+                  <input name={ "StoreContactPhone" } value={ form.StoreContactPhone } placeholder={ "Telefone de Contato" }  onChange={handleChange} />
+                  <input name={ "StorePayDay" } value={ form.StorePayDay } className="data" placeholder={ "DD/MM/AAAA" } onChange={handleChange } onKeyUp={  (e) => { FormatDate(e) }}/>
+                  <input name={ "StoreURL" } value={ form.StoreURL } placeholder={ "Url da loja" }  onChange={handleChange} />
+                  <select name={ "StorePlataform" } value={ form.StorePlataform } onChange={handleChange} >
+                    <option value={ "Tray" }>Tray</option>
+                    <option value={ "Vtex" }>Vtex</option>
+                    <option value={ "Jet" }>Jet</option>
+                    <option value={ "Fbits" }>Fbits</option>
+                    <option value={ "Nuvemshop" }>Nuvemshop</option>
                   </select>
-                  <select name={ "store" } value={ user.store ? user.store : store } readOnly={ user.store ? true : false }  onChange={(e) => setStore(e.target.value)}>
-                    <option value={ "" }>Auaha</option>
-                    {lojas.map(element => {
+                  <input name={ "accessKey" }  placeholder={ "accessKey" }  value={ form.accessKey } onChange={handleChange}/>
+                  <input name={ "apiKey" }  placeholder={ "apiKey" }  value={ form.apiKey } onChange={handleChange}/>
+                  <input name={ "secretKey" }  placeholder={ "secretKey" }  value={ form.secretKey } onChange={handleChange}/>
 
-                      return( <option key={element.id} value={ element.id }> {element.StoreName} </option> )
-                    })}
-                  </select>
+                  <div className={ "checkbox-area" }>
+                    <div className={ "checkbox" }>
+                      <input type="checkbox" name={ "UploadPhotos" }  placeholder={ "UploadPhotos" }  value={ form.UploadPhotos } checked={ form.UploadPhotos? true : false} onChange={handleChangeCheckbox}/>
+                      <label htmlFor={ "UploadPhotos" } className="check"></label>
+                      <label htmlFor={ "UploadPhotos" } className="text">
+                        Ferramenta de Upload de Imagens
+                      </label>
+                    </div>
+                    <div className={ "checkbox" }>
+                      <input type="checkbox" name={ "UploadFiles" }  placeholder={ "UploadFiles" }  value={ form.UploadFiles } checked={ form.UploadFiles? true : false} onChange={handleChangeCheckbox}/>
+                      <label htmlFor={ "UploadFiles" } className="check"></label>
+                      <label htmlFor={ "UploadFiles" } className="text">
+                      Ferramenta de Upload de Arquivos
+                      </label>
+                    </div>
+                    <div className={ "checkbox" }>
+                      <input type="checkbox" name={ "CustomCase" }  placeholder={ "CustomCase" }  value={ form.CustomCase } checked={ form.CustomCase? true : false} onChange={handleChangeCheckbox}/>
+                      <label htmlFor={ "CustomCase" } className="check"></label>
+                      <label htmlFor={ "CustomCase" } className="text">
+                      Ferramenta de Customização de Capinhas
+                      </label>
+                    </div>
+                    <div className={ "checkbox" }>
+                      <input type="checkbox" name={ "MeasurementChart" }  placeholder={ "MeasurementChart" } checked={ form.MeasurementChart? true : false} onChange={handleChangeCheckbox}/>
+                      <label htmlFor={ "MeasurementChart" } className="check"></label>
+                      <label htmlFor={ "MeasurementChart" } className="text">
+                      Ferramenta da Tabela de Medidas
+                      </label>
+                    </div>
+                  </div>
+
                   <button type="submit">{ button }</button>
               </form>
           </div>
@@ -300,9 +400,8 @@ export default function Usuarios(props) {
           <div className={ "listagem__header" }>
               <select name={ "searchCampo" } value={ searchCampo }  onChange={(e) => setSearchCampo(e.target.value)}>
                 <option value={ "" }>Selecione</option>
-                <option value={ "name" }>Nome</option>
-                <option value={ "store" }>Loja(ID)</option>
-                <option value={ "email" }>E-mail</option>
+                <option value={ "StoreName" }>Nome</option>
+                <option value={ "id" }>Loja(ID)</option>
               </select>
               <input name={ "search" } value={ search } placeholder={ "Buscar" } onChange={(e) => setSearch(e.target.value)} />
               <button className="buscar"  onClick={ (e) => Buscar() }>
@@ -344,7 +443,7 @@ export default function Usuarios(props) {
             <button className={ "aviso__cancel" } onClick={ e => { setMsg(`Registro ${id} não foi excluido`); setConfirm(false); setX(false) }}>
               Cancelar
             </button>
-            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro ${id} foi excluido`); deleteUser(x); setX(false);setConfirm(false); Buscar(); }}>
+            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro ${id} foi excluido`); deleteStore(x); setX(false);setConfirm(false); Buscar(); }}>
               Confirmar
             </button>
             </>
