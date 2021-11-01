@@ -5,14 +5,13 @@ import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { setCase, getCasebyWhere , deleteCase, getCasebyId, getCases, getCasesbyOrder } from '/public/services/capas';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 import app from "/public/services/firebase"
-import {  getStorage } from "firebase/storage"
+import storage from "/public/services/storage"
 
 import sair from "/public/images/sair.svg"
 import { async } from '@firebase/util';
-
-const storage = getStorage(app);
 
 
 export default function Modelos(props) {
@@ -65,7 +64,6 @@ export default function Modelos(props) {
     getStores().then((response) => {
       setTimeout(() => {
         setLojas(response)
-        console.log(lojas)
 
       }, 500);
     })
@@ -74,6 +72,7 @@ export default function Modelos(props) {
         setTimeout(() => {
 
           setLista(response)
+          console.log(response)
         }, 500);
 
       })
@@ -190,9 +189,6 @@ export default function Modelos(props) {
       </div>
     )
   }
-
-  
-
   function Editar(id){
 
     setForm({
@@ -215,14 +211,16 @@ export default function Modelos(props) {
 
     })
   }
-  function Excluir(id){
+  async function Excluir(id){
+    var data = await getCasebyId(id)
+    console.log(data)
+
     setMsg(`Registro ${id} será excluido, deseja continuar?`)
     setConfirm(true)
-    setPreview(false)
+    setPreview(data.image1)
     setX(id)
     console.log("foi")
   }
-
   const handleChange = (e) => {
     const value = e.target.value;
     const name = e.target.name;
@@ -241,64 +239,104 @@ export default function Modelos(props) {
     if(data.id){
       setMsg(`Registro ${data.id} editado com sucesso`)
       setConfirm(false)
-      setPreview(false)
+      setPreview( data.image1 )
 
     }else{
       setMsg(`Novo registro criado com sucesso`)
       setConfirm(false)
-      setPreview(false)
+      setPreview(data.image1)
 
     }
-
     setCase(data)
 
+    setForm({
+      "id": "",
+      "image1": "",
+      "image1caminho": "",
+      "image2": "",
+      "image2caminho": "",
+      "loja": "",
+      "productId": "",
+    })
 
     Buscar()
   }
 
 
-  function enviarCapa(){
-    const ref = storage.ref()
-    const refImg = ref.child( form.store +'/images/' + form.productId + '/capa.png')
+  function enviarCapa(e){
+    const refImg = ref(storage, (form.store ? form.store : "Auaha" ) +'/images/' + ( form.productId != "" ? form.productId : "teste") + '/capa.png')
     
-    let reader = new FileReader();
-    reader.onload = function(e) {
-        return new Blob([new Uint8Array(e.target.result)], {type: file.type });
-    };
-    var file = reader.readAsArrayBuffer(file);
+    console.log(e.target.files[0])
 
-    var uploadTask = refImg.put(file)
-    uploadTask.on('state_changed', function(snapshot){
+    var uploadTask = uploadBytesResumable(refImg, e.target.files[0])
+    uploadTask.on('state_changed', 
+    (snapshot) =>{
       // Observe state change events such as progress, pause, and resume
       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
-      var progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
       console.log('Upload is ' + progress + '% done');
       switch (snapshot.state) {
-        case firebase.storage.TaskState.PAUSED: // or 'paused'
+        case 'paused':
           console.log('Upload is paused');
           break;
-        case firebase.storage.TaskState.RUNNING: // or 'running'
+        case 'running':
           console.log('Upload is running');
           break;
       }
-    }, function(error) {
+    },(error) => {
       console.log(error)
     }, function() {
-      uploadTask.snapshot.ref.getDownloadURL().then(function(downloadURL) {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
         console.log('File available at', downloadURL);
+        var caminho = (form.store ? form.store : "Auaha" ) +'/images/' + ( form.productId != "" ? form.productId : "teste") + '/capa.png'
+        var image = downloadURL
+        console.log(caminho, image)
         setForm(prevState => ({
           ...prevState,
-          image1: downloadURL,
-          image1caminho: form.store +'/images/' + form.productId + '/capa.png',
+          image1: image,
+          image1caminho: caminho,
 
-        }));
+      }));
+        
       });
     });
   }
 
-  function enviarMockup(){
+  function enviarMockup(e){
+    const refImg = ref(storage, (form.store ? form.store : "Auaha" ) +'/images/' + ( form.productId != "" ? form.productId : "teste") + '/mockup.png')
     
+    console.log(e.target.files[0])
+
+    var uploadTask = uploadBytesResumable(refImg, e.target.files[0])
+    uploadTask.on('state_changed', 
+    (snapshot) =>{
+      //task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
+      const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+      console.log('Upload is ' + progress + '% done');
+      switch (snapshot.state) {
+        case 'paused':
+          console.log('Upload is paused');
+          break;
+        case 'running':
+          console.log('Upload is running');
+          break;
+      }
+    },(error) => {
+      console.log(error)
+    }, function() {
+      getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
+        console.log('File available at', downloadURL);
+        var caminho = (form.store ? form.store : "Auaha" ) +'/images/' + ( form.productId != "" ? form.productId : "teste") + '/mockup.png'
+        var image = downloadURL
+        console.log(caminho, image)
+        setForm(prevState => ({
+          ...prevState,
+          image2: image,
+          image2caminho: caminho,
+
+      }));
+      });
+    });
   }
 
   return (
@@ -349,7 +387,7 @@ export default function Modelos(props) {
                   <input name={ "image1caminho" } type="hidden" value={ form.image1caminho } onChange={handleChange}/>
                   <input name={ "image2caminho" } type="hidden" value={ form.image2caminho } onChange={handleChange}/>
                   <div className="file">
-                    <input name={ "capa" } type="file" value={ form.image1 } onChange={enviarCapa}/>
+                    <input name={ "capa" } type="file" onChange={enviarCapa}/>
                     <label htmlFor="capa" className={ form.image1? "active" : ""}>
                       {form.image1 ? 
                       <> 
@@ -379,9 +417,9 @@ export default function Modelos(props) {
                     </label>
                   </div>
                   <div className="file">
-                    <input name={ "mockup" } type="file" value={ form.image2 } onChange={enviarMockup}/>
-                    <label htmlFor="mockup" className={ form.image2? "active" : ""}>
-                      {form.image1 ? 
+                    <input name={ "mockup" } type="file" onChange={enviarMockup}/>
+                    <label htmlFor="mockup" className={ form.image2 ? "active" : ""}>
+                      {form.image2 ? 
                       <> 
                         <svg xmlns="http://www.w3.org/2000/svg" width="20.121" height="17.303" viewBox="0 0 20.121 17.303">
                           <g id="_8Ot0Al.tif" data-name="8Ot0Al.tif" transform="translate(-1232.329 -1260.092)">
@@ -402,7 +440,7 @@ export default function Modelos(props) {
                           </g>
                         </svg>
 
-                        Escolher arquivo para a capa
+                        Escolher arquivo para o mockup
                       </>
                       }
                       
@@ -440,7 +478,7 @@ export default function Modelos(props) {
             {preview 
             ?
             <div className={ "aviso__preview" }>
-              <Image src={ preview } />
+              <Image src={ preview } layout="fill"/>
             </div>
             : null
             }
@@ -456,10 +494,10 @@ export default function Modelos(props) {
             </button>
             :
             <>
-            <button className={ "aviso__cancel" } onClick={ e => { setMsg(`Registro ${id} não foi excluido`); setConfirm(false); setX(false) }}>
+            <button className={ "aviso__cancel" } onClick={ e => { setMsg(`Registro não foi excluido`); setConfirm(false); setX(false) }}>
               Cancelar
             </button>
-            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro ${id} foi excluido`); deleteUser(x); setX(false);setConfirm(false); Buscar(); }}>
+            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro excluido`); deleteCase(x); setX(false);setConfirm(false); Buscar(); }}>
               Confirmar
             </button>
             </>

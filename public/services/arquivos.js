@@ -6,10 +6,10 @@ const db = getFirestore(app)
 
 const logRef = collection(db, "log")
 
-const caseRef = collection(db, "case")
+const fileRef = collection(db, "file")
 
-const getCasebyId = async (id) => {
-    const querySnapshot = await getDoc(doc(caseRef, id));
+const getArquivoById = async (id) => {
+    const querySnapshot = await getDoc(doc(fileRef, id));
 
     let response
     
@@ -22,8 +22,8 @@ const getCasebyId = async (id) => {
     return response
 }
 
-const getCases = async () => {
-    const querySnapshot = await getDocs(caseRef)
+const getArquivos = async () => {
+    const querySnapshot = await getDocs(fileRef)
 
     var response = []
 
@@ -55,8 +55,8 @@ const getCases = async () => {
     return response
 }
 
-const getCasesbyOrder = async (order) => {
-    const querySnapshot = await getDocs(query(caseRef, orderBy(order)));
+const getArquivosbyOrder = async (order) => {
+    const querySnapshot = await getDocs(query(fileRef, orderBy(order)));
 
     var response = []
 
@@ -88,8 +88,8 @@ const getCasesbyOrder = async (order) => {
     return response
 }
 
-const getCasebyWhere = async (campo, valor) => {
-    const querySnapshot = await getDocs(query(caseRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
+const getArquivobyWhere = async (campo, valor) => {
+    const querySnapshot = await getDocs(query(fileRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
 
     var response = []
 
@@ -121,13 +121,13 @@ const getCasebyWhere = async (campo, valor) => {
     return response
 }
 
-const setCase = async (data) => {
+const setArquivo = async (data) => {
     var identificador
     if(data.id){
-        await setDoc(doc(db, "case" , data.id), data);
+        await setDoc(doc(db, "file" , data.id), data);
         identificador = data.id
     }else{
-        const docRef = await addDoc(caseRef, data);
+        const docRef = await addDoc(fileRef, data);
         identificador = docRef
     }
 
@@ -138,10 +138,10 @@ const setCase = async (data) => {
 }
 
 
-const deleteCase = async (id) => {
-    await deleteDoc(doc(db, "case" , id));
+const deleteArquivo = async (id) => {
+    await deleteDoc(doc(db, "file" , id));
 
     return { msg: "pronto"}
 }
 
-export { setCase, getCasebyWhere , deleteCase, getCasebyId, getCases, getCasesbyOrder }
+export { setCase, getCasebyWhere , deleteCase, getCasebyId, getArquivos, getArquivosbyOrder }
