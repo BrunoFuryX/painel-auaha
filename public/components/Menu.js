@@ -93,17 +93,19 @@ export default function Menu(props) {
         </ul>;
     }
     function toggleMenu(){
-      if(menuActive == true){
+      if(expandir == true){
         setMenuActive(false)
+        props.Exp()
       }else{
         setMenuActive(true)
+        props.Exp()
       }
     }
     const Expand = (props) => {
         
-        return <button className={ "menu__item" } onClick={ toggleMenu }>
-            <Image src={ menuActive ? minimizar : expandir } width={ 15 } height={ 15 }/>
-            {!menuActive
+        return <button className={ "menu__item" } onClick={ () => {toggleMenu(); } }>
+            <Image src={ expandir ? minimizar : expandir } width={ 15 } height={ 15 }/>
+            {!expandir
             ? "Expandir menu"
             : "Minimizar menu"
             }
@@ -112,7 +114,7 @@ export default function Menu(props) {
 
 
     return (<>
-        <div className={ "menu desktop " + (menu) + (menuActive ? " active" : "") }>
+        <div className={ "menu desktop " + (menu) + (expandir ? " active" : "") }>
           <div className={ "menu__container" }>
 
             <Logo/>

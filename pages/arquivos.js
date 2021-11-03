@@ -5,6 +5,9 @@ import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
 import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/arquivos';
+import $ from 'jquery'
+
+import { setLog } from '/public/services/logs';
 
 import sair from "/public/images/sair.svg"
 import { async } from '@firebase/util';
@@ -172,6 +175,13 @@ export default function Usuarios(props) {
     setPreview(false)
     setX(id)
     console.log("foi")
+    var infos = 
+    { loja: user.store, 
+        usuario: user.name, 
+        data: Date.now().toString(), 
+        info: `${ user.name } deletou arquivo ${ id }` 
+    }
+    setLog(infos)
   }
 
   return (

@@ -5,6 +5,9 @@ import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
 import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/capinhas';
+import $ from 'jquery'
+
+import { setLog } from '/public/services/logs';
 
 import sair from "/public/images/sair.svg"
 import { async } from '@firebase/util';
@@ -167,6 +170,15 @@ export default function Usuarios(props) {
     setConfirm(true)
     setPreview(false)
     setX(id)
+
+    var infos = 
+    { loja: user.store, 
+        usuario: user.name, 
+        data: Date.now().toString(), 
+        info: `${ user.name } deletou capa personalizada ${ id }` 
+    }
+    setLog(infos)
+
   }
 
   return (

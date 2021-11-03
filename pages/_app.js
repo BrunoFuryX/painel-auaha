@@ -15,6 +15,8 @@ function MyApp({ Component, pageProps }) {
     const [store, setStore] = useState(!ISSERVER ? JSON.parse(localStorage.getItem('store')) : {})
 
     const [darkmode, setDarkmode] = useState(!ISSERVER ? localStorage.getItem('darkmode') : true)
+    const [expandir, setExpandir] = useState(!ISSERVER ? localStorage.getItem('expandir') : false)
+
 
     const [email, setEmail] = useState()
     const [senha, setSenha] = useState()
@@ -26,16 +28,18 @@ function MyApp({ Component, pageProps }) {
             setUser(JSON.parse(localStorage.getItem('user')))
             setStore(JSON.parse(localStorage.getItem('store')))
             setDarkmode(JSON.parse(localStorage.getItem('darkmode')))
+            setExpandir(JSON.parse(localStorage.getItem('expandir')))
+
         }
     }, [])
 
 
     function Sair() {
         setLogged(false)
-        setUser({})
+        setUser(false)
 
         localStorage.setItem('logged', false);
-        localStorage.setItem('user', {});
+        localStorage.setItem('user', false);
     }
 
     function DarkMode() {
@@ -45,7 +49,12 @@ function MyApp({ Component, pageProps }) {
 
     }
 
+    function Expandir() {
+        var exp = expandir ? false : true
+        setExpandir(exp)
+        localStorage.setItem('expandir', JSON.stringify(exp));
 
+    }
     const LogoAuahaSvg = (props) => {
         let color = props.color
         return (
@@ -92,8 +101,8 @@ function MyApp({ Component, pageProps }) {
             <main className={darkmode ? "dark" : "light"}>
                 {logged == true
                     ? <>
-                        <HeaderMobile darkmode={darkmode} Sair={Sair} Darkmode={DarkMode} dark={darkmode} user={user} store={store} />
-                        <Menu darkmode={darkmode} user={user} store={store} />
+                        <HeaderMobile darkmode={darkmode} Sair={Sair} Darkmode={DarkMode} user={user} store={store} />
+                        <Menu darkmode={darkmode} user={user} store={store} expandir={expandir} Exp={Expandir}/>
                         <div className={"body"}>
                             <Component {...pageProps} Sair={Sair} Darkmode={DarkMode} dark={darkmode} user={user} store={store} />
                         </div>

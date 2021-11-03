@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
 import $ from 'jquery';
+import { setLog } from '/public/services/logs';
 
 
 import sair from "/public/images/sair.svg"
@@ -220,6 +221,7 @@ export default function Lojas(props) {
       "CustomCase": "",
     })
 
+    $("html, body").animate({ scrollTop: 0 }, "slow");
 
     getStorebyId(id).then(response => {
       let resposta = response
@@ -228,6 +230,7 @@ export default function Lojas(props) {
           id: id
       })
     })
+
     
     setButton("Salvar")
     setEdit(true)
@@ -238,6 +241,14 @@ export default function Lojas(props) {
     setConfirm(true)
     setPreview(false)
     setX(id)
+    var infos = 
+    { loja: user.store, 
+        usuario: user.name, 
+        data: Date.now().toString(), 
+        info: `${ user.name } excluiu loja ${ id }`
+    }
+    setLog(infos)
+
   }
     
   function enviarForm(e) {
@@ -249,11 +260,26 @@ export default function Lojas(props) {
       setMsg(`Registro ${form.id} editado com sucesso`)
       setConfirm(false)
       setPreview(false)
+      var infos = 
+      { loja: user.store, 
+          usuario: user.name, 
+          data: Date.now().toString(), 
+          info: `${ user.name } editou loja ${ form.id }` 
+      }
+      setLog(infos)
+
 
     }else{
       setMsg(`Novo registro criado com sucesso`)
       setConfirm(false)
       setPreview(false)
+      var infos = 
+      { loja: user.store, 
+          usuario: user.name, 
+          data: Date.now().toString(), 
+          info: `${ user.name } criou loja ${ form.StoreName }`
+      }
+      setLog(infos)
 
     }
 

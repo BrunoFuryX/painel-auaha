@@ -4,10 +4,9 @@ import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
-import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/fotos';
-import $ from 'jquery'
+import { getLogbyWhere, getLogs, getLogsbyOrder, setLog, deleteLog, getLogById,getRecentLogs } from '/public/services/logs';
 
-import { setLog } from '/public/services/logs';
+import $ from 'jquery'
 
 
 import sair from "/public/images/sair.svg"
@@ -29,7 +28,7 @@ export default function Usuarios(props) {
   const [ lista, setLista] = useState([])
 
   useEffect( ()=>{
-    getArquivos().then((response) => {
+    getLogs().then((response) => {
       setTimeout(() => {
         setLista(response)
       }, 500);
@@ -38,16 +37,9 @@ export default function Usuarios(props) {
   },[])
 
   function Buscar(){
-    getArquivos().then((response) => {
-      setTimeout(() => {
-        setLojas(response)
-        console.log(lojas)
-
-      }, 500);
-    })
 
     if(searchCampo && search){
-        getArquivobyWhere(searchCampo, search).then( (response) => {
+        getLogbyWhere(searchCampo, search).then( (response) => {
         setTimeout(() => {
 
           setLista(response)
@@ -55,7 +47,7 @@ export default function Usuarios(props) {
 
       })
     }else{
-        getArquivos().then( (response) => {
+        getLogs().then( (response) => {
         setTimeout(() => {
 
         setLista(response)
@@ -84,19 +76,18 @@ export default function Usuarios(props) {
               </b>
               { item.loja}
             </div>
-            
-            <div className={ "tipo" }>
+            <div className={ "usuario" }>
               <b>
-                Tipo de arquivo:
+                Usuario:
               </b>
-              { item.tipo}
+              { item.usuario}
             </div>
 
-            <div className={ "arquivo" }>
+            <div className={ "info" }>
               <b>
-                Imagem:
+                Info:
               </b>
-              <a href={ item.url} target="_blank" rel="noreferrer"> Ver a Imagem </a>
+              { item.info}
 
             </div>
 
@@ -105,22 +96,6 @@ export default function Usuarios(props) {
                 Data:
               </b>
               { item.data}
-            </div>
-            <div className={ "acoes" }>
-              <b>
-                Açoes:
-              </b>
-              <button className="excluir" onClick={ () => Excluir(item.id)}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="15.335" height="16.675" viewBox="0 0 15.335 16.675">
-                  <g id="_8EXeZC.tif" data-name="8EXeZC.tif" transform="translate(-63 -165.458)">
-                    <g id="Grupo_30" data-name="Grupo 30" transform="translate(63 165.458)">
-                      <path id="Caminho_35" data-name="Caminho 35" d="M75.105,182.133H66.23c-.061-.017-.122-.035-.184-.049a2.086,2.086,0,0,1-1.643-2.105q0-5.069,0-10.138v-.214H64.22c-.174,0-.348,0-.522,0-.361-.013-.55-.191-.7-.65v-.1c.171-.521.343-.643.905-.643h3.28c0-.666,0-1.306,0-1.945a.724.724,0,0,1,.825-.831h5.316a.724.724,0,0,1,.825.831q0,.879,0,1.758v.188h3.378a.7.7,0,0,1,.613.24,2.3,2.3,0,0,1,.195.4v.1c-.175.539-.331.651-.91.651h-.493v7.992c0,.808.005,1.616,0,2.425a2.081,2.081,0,0,1-1.642,2.04C75.227,182.1,75.167,182.116,75.105,182.133Zm.433-12.5H65.805c0,.057-.007.1-.007.152q0,5.088,0,10.176a.7.7,0,0,0,.791.776q4.078,0,8.156,0a1.1,1.1,0,0,0,.29-.03.7.7,0,0,0,.5-.761q0-5.072,0-10.144Zm-6.95-1.413h4.16v-1.364h-4.16Z" transform="translate(-63 -165.458)" fill="#ff4c34"/>
-                      <path id="Caminho_36" data-name="Caminho 36" d="M212.682,339.772c0-1.02,0-2.04,0-3.06a.693.693,0,0,1,1.378-.143,1.8,1.8,0,0,1,.008.2q0,3.027,0,6.054a.713.713,0,0,1-.44.744.683.683,0,0,1-.939-.6c-.017-.64-.007-1.28-.008-1.92Q212.681,340.407,212.682,339.772Z" transform="translate(-207.796 -330.41)" fill="#ff4c34"/>
-                      <path id="Caminho_37" data-name="Caminho 37" d="M342.122,339.71q0,1.53,0,3.06a.694.694,0,0,1-1.381.132c0-.049-.006-.1-.006-.146q0-3.043,0-6.087a.7.7,0,0,1,.469-.738.679.679,0,0,1,.91.606c.017.6.007,1.193.008,1.79Q342.123,339.019,342.122,339.71Z" transform="translate(-331.672 -330.332)" fill="#ff4c34"/>
-                    </g>
-                  </g>
-                </svg>
-              </button>
             </div>
         </div> 
       )
@@ -142,24 +117,19 @@ export default function Usuarios(props) {
               Loja
             </div>
           </div>
-          <div className={ "tipo" }>
+          <div className={ "usuario" }>
             <div>
-              Tipo
+              Usuário
             </div>
           </div>
-          <div className={ "arquivo" }>
+          <div className={ "info" }>
             <div>
-            Imagem
+            Informações
             </div>
           </div>
           <div className={ "data" }>
             <div>
               Data
-            </div>
-          </div>
-          <div className={ "acoes" }>
-            <div>
-              Açoes
             </div>
           </div>
         </div>
@@ -170,27 +140,11 @@ export default function Usuarios(props) {
     )
   }
 
-  function Excluir(id){
-    setMsg(`Registro ${id} será excluido, deseja continuar?`)
-    setConfirm(true)
-    setPreview(false)
-    setX(id)
-    console.log("foi")
-    var infos = 
-    { loja: user.store, 
-        usuario: user.name, 
-        data: Date.now().toString(), 
-        info: `${ user.name } deletou foto ${ id }` 
-    }
-    setLog(infos)
-
-  }
-
   return (
     <>
       <header className="desktop">
         <h2>
-          Fotos
+          Logs
         </h2>
         <div>
           <div className={"customer"}>
@@ -228,7 +182,7 @@ export default function Usuarios(props) {
               </button>
           </div>
           <div className={ "listagem__list" }>
-            <div className={ "listagem__list-header" }>Fotos</div>
+            <div className={ "listagem__list-header" }>Logs</div>
             <div className={ "listagem__list-body" }>
               <Listagem />
             </div>

@@ -22,8 +22,7 @@ import minimizar from "/public/images/minimizar.svg"
 
 export default function HeaderMobile(props) {
     const user = props.user ? props.user : {}
-    var darkmode = props.darkmode
-    const [dark, setDark] = useState(props.dark)
+    const [dark, setDark] = useState(props.darkmode)
 
     const [menuActive1, setMenuActive1] = useState(false)
     const [menuActive2, setMenuActive2] = useState(false)
@@ -49,7 +48,7 @@ export default function HeaderMobile(props) {
     }
     const Logo = (props) => {
         return <a className={"menu__logo"} href={"/"}>
-            <LogoAuahaSvg color={darkmode ? "#fff" : "#000"} />
+            <LogoAuahaSvg color={dark ? "#fff" : "#000"} />
         </a>;
     }
 
@@ -156,6 +155,10 @@ export default function HeaderMobile(props) {
                     :
                     <>
                         <button className={"toggleMenu2"} onClick={ () => setMenuActive2(true) }>
+                            {user.foto ? 
+                                <Image src={ user.foto ? user.foto : ImagemUsuario} width={49} height={49} />
+
+                            :
                             <svg xmlns="http://www.w3.org/2000/svg" width="49" height="49" viewBox="0 0 49 49">
                                 <g id="Grupo_453" data-name="Grupo 453" transform="translate(-305 -16)">
                                     <circle id="Elipse_1" data-name="Elipse 1" cx="24.5" cy="24.5" r="24.5" transform="translate(305 16)" fill="#1e1f23" />
@@ -166,6 +169,8 @@ export default function HeaderMobile(props) {
                                     </g>
                                 </g>
                             </svg>
+                            }
+                            
                         </button>
 
 

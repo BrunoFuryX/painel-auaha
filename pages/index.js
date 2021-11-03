@@ -5,6 +5,7 @@ import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 
 import { getRecentUsers } from '/public/services/usuarios';
 import { getRecentStores } from '/public/services/lojas';
+import { getRecentLogs } from '/public/services/logs';
 
 
 
@@ -16,11 +17,15 @@ export default function Home(props) {
 
   const [usersList, setUsersList] = useState([])
   const [storesList, setStoresList] = useState([])
+  const [logsList, setLogsList] = useState([])
+
 
 
   useEffect(() => {
     getRecentUsers(user.store).then(response => setUsersList(response))
     getRecentStores().then(response => setStoresList(response))
+    getRecentLogs(user.store).then(response => setLogsList(response))
+
   },[])
 
 
@@ -81,7 +86,7 @@ export default function Home(props) {
 
           <DashboardItem titulo={ "Últimas Lojas" } lista={ storesList } link={ "/lojas" }/>
 
-          <DashboardItem titulo={ "Últimos Logs" } lista={ ["Usuário 01 modificou o arquivo x", "Login de Usuário 01", "Usuário 01 modificou o arquivo x", "Login de Usuário 01"] } link={ "/logs" }/>
+          <DashboardItem titulo={ "Últimos Logs" } lista={ logsList } link={ "/logs" }/>
 
         </div>
       </div>

@@ -4,7 +4,6 @@ import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere
 
 const db = getFirestore(app)
 
-const logRef = collection(db, "log")
 
 const fileRef = collection(db, "photo")
 const options = {
@@ -36,7 +35,8 @@ const getArquivos = async () => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
                 tipo: doc.data().tipo,
                 url: doc.data().url,
                 loja: loja
@@ -46,7 +46,8 @@ const getArquivos = async () => {
 
             response.push({
                 id: doc.id,
-                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
                 tipo: doc.data().tipo,
                 url: doc.data().url,
                 loja: loja
@@ -69,7 +70,8 @@ const getArquivosbyOrder = async (order) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
                 tipo: doc.data().tipo,
                 url: doc.data().url,
                 loja: loja
@@ -79,7 +81,8 @@ const getArquivosbyOrder = async (order) => {
 
             response.push({
                 id: doc.id,
-                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
                 tipo: doc.data().tipo,
                 url: doc.data().url,
                 loja: loja
@@ -102,7 +105,8 @@ const getArquivobyWhere = async (campo, valor) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
                 tipo: doc.data().tipo,
                 url: doc.data().url,
                 loja: loja
@@ -112,7 +116,8 @@ const getArquivobyWhere = async (campo, valor) => {
 
             response.push({
                 id: doc.id,
-                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
                 tipo: doc.data().tipo,
                 url: doc.data().url,
                 loja: loja
@@ -133,7 +138,6 @@ const setArquivo = async (data) => {
         identificador = docRef
     }
 
-    await addDoc(logRef, data);
 
     return { msg: "pronto", id: identificador}
     

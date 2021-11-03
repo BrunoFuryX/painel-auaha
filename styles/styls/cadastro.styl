@@ -62,16 +62,18 @@
                 grid-area: 2 / 4 / 4 / 6;
                 display: flex
                 flex-wrap: wrap
-                justify-content: space-between
+                justify-content: center
                 align-items: center
-                gap: 20px
+                gap: 10px
                 background: var(--bg)
                 border-radius: 5px
-                padding: 25px 50px
                 width: 100%
                 max-width: 1200px
+                height: 100%;
                 box-sizing: border-box;
-                @media (max-width 991px)
+                padding: 15px 30px
+
+                @media (max-width 1300px)
                     padding: 15px 10px
 
                 .checkbox
@@ -82,6 +84,7 @@
                     margin: 0
                     @media (min-width 991px)
                         width: 47%;
+                        overflow: hidden
 
                     &:hover 
                         input ~ .check 
@@ -128,17 +131,21 @@
                 width: 100%
                 color: var(--texto)
                 background: var(--bg)
-                height: 50px
+                
+                height: 44px
                 border-radius: 5px
                 border 0
                 padding:  15px
                 font-size: 14px
                 letter-spacing: .2px
-
+                
+            select
+                appearance: none
+                background: var(--seta) right center no-repeat var(--bg);
             .file
                 position: relative
                 background: var(--bg)
-                height: 50px
+                height: 44px
                 border-radius: 5px
                 border 0
                 padding: 0 15px
@@ -176,9 +183,10 @@
                 max-width: 160px
                 color: var(--textoInvertido)
                 background: var(--verde)
-                height: 50px
+                height: 44px
                 border-radius: 5px
                 border 0
+                font-size: 14px
                 padding:  15px
                 text-transform: uppercase
             
