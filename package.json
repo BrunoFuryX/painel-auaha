@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "des": "npm-run-all --parallel dev gulp",
+    "des": "NODE_OPTIONS=--openssl-legacy-provider && npm-run-all --parallel dev gulp",
     "dev": "next dev",
     "gulp": "gulp",
     "build": "next build",

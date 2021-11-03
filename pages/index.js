@@ -49,7 +49,7 @@ export default function Home(props) {
 
   return (
     <>
-      <header>
+      <header className="desktop">
         <h2>
           Painel do Usuário
         </h2>

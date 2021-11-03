@@ -17,6 +17,7 @@ import { async } from '@firebase/util';
 export default function Modelos(props) {
   const user = props.user
   const [dark, setDark] = useState(props.dark)
+  const [edit, setEdit] = useState(false)
 
   const [form, setForm] = useState({
     "id": "",
@@ -208,6 +209,7 @@ export default function Modelos(props) {
           id: id
       })
       setButton("Salvar")
+      setEdit(true)
 
     })
   }
@@ -258,6 +260,7 @@ export default function Modelos(props) {
       "loja": "",
       "productId": "",
     })
+    setEdit(false)
 
     Buscar()
   }
@@ -341,7 +344,7 @@ export default function Modelos(props) {
 
   return (
     <>
-      <header>
+      <header className="desktop">
         <h2>
          Modelos de capas
         </h2>
@@ -368,7 +371,7 @@ export default function Modelos(props) {
       </header>
       <div className={ "painel" }>
         <div className={ "cadastro" }>
-          <div className={ "cadastro__container" }>
+          <div className={ "cadastro__container " + (edit ? "editar" : "" ) }>
               <h3>
                 Adicionar novas capas
               </h3>

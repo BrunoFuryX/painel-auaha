@@ -7,7 +7,9 @@ const db = getFirestore(app)
 const logRef = collection(db, "log")
 
 const fileRef = collection(db, "file")
-
+const options = {
+    hourCycle: 'h23'
+}
 const getArquivoById = async (id) => {
     const querySnapshot = await getDoc(doc(fileRef, id));
 
@@ -34,9 +36,9 @@ const getArquivos = async () => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }else{
@@ -44,13 +46,15 @@ const getArquivos = async () => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }
     });
+
+    console.log(response)
 
     return response
 }
@@ -67,9 +71,9 @@ const getArquivosbyOrder = async (order) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().name,
-                image1: doc.data().email,
-                image2: doc.data().lvl,
+                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }else{
@@ -77,9 +81,9 @@ const getArquivosbyOrder = async (order) => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().name,
-                image1: doc.data().email,
-                image2: doc.data().lvl,
+                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }
@@ -100,9 +104,9 @@ const getArquivobyWhere = async (campo, valor) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }else{
@@ -110,9 +114,9 @@ const getArquivobyWhere = async (campo, valor) => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(doc.data().data).toLocaleString('pt-BR', options),
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }
@@ -144,4 +148,4 @@ const deleteArquivo = async (id) => {
     return { msg: "pronto"}
 }
 
-export { setCase, getCasebyWhere , deleteCase, getCasebyId, getArquivos, getArquivosbyOrder }
+export { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo }

@@ -28,7 +28,8 @@ body
 
 main
     min-height: 100vh
-    display: flex
+    @media (min-width 991px)
+        display: flex
 .body
     width: 100%
     display: flex
@@ -110,3 +111,12 @@ body::-webkit-scrollbar-thumb
 	border-radius: 10px;
 	background-color: #4CFFDE;
 
+
+@media(max-width: 991px)
+    .desktop
+        display: none
+
+
+@media(min-width: 991px)
+    .mobile
+        display: none

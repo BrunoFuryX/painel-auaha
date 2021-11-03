@@ -4,6 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
+import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/arquivos';
 
 import sair from "/public/images/sair.svg"
 import { async } from '@firebase/util';
@@ -11,19 +12,9 @@ import { async } from '@firebase/util';
 export default function Usuarios(props) {
   const user = props.user
   const [dark, setDark] = useState(props.dark)
-  const [edit, setEdit] = useState(false)
-
-  const [ id, setId] = useState("")
-  const [ name, setName] = useState("")
-  const [ email, setEmail] = useState("")
-  const [ password, setPassword] = useState("")
-  const [ lvl, setLvl] = useState("Usuario")
-  const [ store, setStore] = useState("")
 
   const [ search, setSearch] = useState("")
   const [ searchCampo, setSearchCampo] = useState(false)
-
-  const [ button, setButton] = useState("Adicionar")
 
   const [ msg, setMsg] = useState(false)
   const [ confirm, setConfirm] = useState(false)
@@ -31,28 +22,19 @@ export default function Usuarios(props) {
 
   const [ x, setX] = useState("waiting")
 
-  const [lojas, setLojas] = useState([])
-
   const [ lista, setLista] = useState([])
 
   useEffect( ()=>{
-    getUsers().then((response) => {
+    getArquivos().then((response) => {
       setTimeout(() => {
         setLista(response)
       }, 500);
     })
 
-    getStores().then((response) => {
-      setTimeout(() => {
-        setLojas(response)
-        console.log(lojas)
-
-      }, 500);
-    })
   },[])
 
   function Buscar(){
-    getStores().then((response) => {
+    getArquivos().then((response) => {
       setTimeout(() => {
         setLojas(response)
         console.log(lojas)
@@ -61,7 +43,7 @@ export default function Usuarios(props) {
     })
 
     if(searchCampo && search){
-      getUsersbyWhere(searchCampo, search).then( (response) => {
+        getArquivobyWhere(searchCampo, search).then( (response) => {
         setTimeout(() => {
 
           setLista(response)
@@ -69,7 +51,7 @@ export default function Usuarios(props) {
 
       })
     }else{
-      getUsers().then( (response) => {
+        getArquivos().then( (response) => {
         setTimeout(() => {
 
         setLista(response)
@@ -92,35 +74,38 @@ export default function Usuarios(props) {
               </b>
               { item.id}
             </div>
-            <div className={ "nome" }>
-              <b>
-                Nome:
-              </b>
-              { item.name}
-            </div>
-            <div className={ "email" }>
-              <b>
-                E-mail:
-              </b>
-              { item.email}
-            </div>
             <div className={ "loja" }>
               <b>
                 Loja:
               </b>
-              { item.store}
+              { item.loja}
             </div>
-            <div className={ "nivel" }>
+            
+            <div className={ "tipo" }>
               <b>
-                Nivel de Acesso:
+                Tipo de arquivo:
               </b>
-              { item.lvl}
+              { item.tipo}
+            </div>
+
+            <div className={ "arquivo" }>
+              <b>
+                Arquivo:
+              </b>
+              <a href={ item.url} target="_blank" rel="noreferrer"> Ver o arquivo </a>
+
+            </div>
+
+            <div className={ "data" }>
+              <b>
+                Data:
+              </b>
+              { item.data}
             </div>
             <div className={ "acoes" }>
               <b>
                 Açoes:
               </b>
-              <button className="editar" onClick={ () => Editar(item.id)}>Editar</button>
               <button className="excluir" onClick={ () => Excluir(item.id)}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="15.335" height="16.675" viewBox="0 0 15.335 16.675">
                   <g id="_8EXeZC.tif" data-name="8EXeZC.tif" transform="translate(-63 -165.458)">
@@ -148,24 +133,24 @@ export default function Usuarios(props) {
               ID
             </div>
           </div>
-          <div className={ "nome" }>
-            <div>
-              Nome
-            </div>
-          </div>
-          <div className={ "email" }>
-            <div>
-              E-mail
-            </div>
-          </div>
           <div className={ "loja" }>
             <div>
               Loja
             </div>
           </div>
-          <div className={ "nivel" }>
+          <div className={ "tipo" }>
             <div>
-              Nivel de Acesso
+              Tipo
+            </div>
+          </div>
+          <div className={ "arquivo" }>
+            <div>
+              Arquivo
+            </div>
+          </div>
+          <div className={ "data" }>
+            <div>
+              Data
             </div>
           </div>
           <div className={ "acoes" }>
@@ -181,22 +166,6 @@ export default function Usuarios(props) {
     )
   }
 
-  
-
-  function Editar(id){
-    getUserbyId(id).then(response => {
-      setId(id)
-      setEmail(response.email)
-      setLvl(response.lvl)
-      setName(response.name)
-      setStore(response.store)
-      setPassword(response.password)
-      setButton("Salvar")
-      setEdit(true)
-
-
-    })
-  }
   function Excluir(id){
     setMsg(`Registro ${id} será excluido, deseja continuar?`)
     setConfirm(true)
@@ -204,52 +173,12 @@ export default function Usuarios(props) {
     setX(id)
     console.log("foi")
   }
-    
-  function enviarForm(e) {
-    e.preventDefault();
-
-    const data = {
-      id,
-      name,
-      email,
-      password,
-      lvl,
-      store
-    }
-
-    if(id){
-      setMsg(`Registro ${id} editado com sucesso`)
-      setConfirm(false)
-      setPreview(false)
-
-    }else{
-      setMsg(`Novo registro criado com sucesso`)
-      setConfirm(false)
-      setPreview(false)
-
-    }
-
-    setUser(data)
-
-    setId("")
-    setName("")
-    setEmail("")
-    setPassword("")
-    setLvl("Usuario")
-    setStore("")
-    setButton("Adicionar")
-    setEdit(false)
-
-    Buscar()
-  }
-
-
 
   return (
     <>
       <header className="desktop">
         <h2>
-          Usuários
+          Arquivos
         </h2>
         <div>
           <div className={"customer"}>
@@ -273,40 +202,11 @@ export default function Usuarios(props) {
         </div>
       </header>
       <div className={ "painel" }>
-        <div className={ "cadastro" }>
-          <div className={ "cadastro__container " + (edit ? "editar" : "" )}>
-              <h3>
-                Adicionar novos usuários
-              </h3>
-              <form onSubmit={ e => enviarForm(e) }>
-                  <input type="hidden" name={ "id" } value={ id }/>
-                  <input name={ "name" } value={ name }  placeholder={ "Nome" }  onChange={(e) => setName(e.target.value)}/>
-                  <input name={ "email" } value={ email }  placeholder={ "E-mail" }  onChange={(e) => setEmail(e.target.value)}/>
-                  <input type="password" name={ "password" }  placeholder={ "Senha" }  value={ password } onChange={(e) => setPassword(e.target.value)} />
-                  <select name={ "lvl" } value={ lvl } onChange={(e) => setLvl(e.target.value)} >
-                    <option value={ "Usuario" }>Usuario</option>
-                    <option value={ "Gerente" }>Gerente</option>
-                    <option value={ "Admin" }>Admin</option>
-                    <option value={ "Master" }>Master</option>
-                  </select>
-                  <select name={ "store" } value={ user.store ? user.store : store } readOnly={ user.store ? true : false }  onChange={(e) => setStore(e.target.value)}>
-                    <option value={ "" }>Auaha</option>
-                    {lojas.map(element => {
-
-                      return( <option key={element.id} value={ element.id }> {element.StoreName} </option> )
-                    })}
-                  </select>
-                  <button type="submit">{ button }</button>
-              </form>
-          </div>
-        </div>
         <div className={ "listagem" }>
           <div className={ "listagem__header" }>
               <select name={ "searchCampo" } value={ searchCampo }  onChange={(e) => setSearchCampo(e.target.value)}>
                 <option value={ "" }>Selecione</option>
-                <option value={ "name" }>Nome</option>
                 <option value={ "store" }>Loja(ID)</option>
-                <option value={ "email" }>E-mail</option>
               </select>
               <input name={ "search" } value={ search } placeholder={ "Buscar" } onChange={(e) => setSearch(e.target.value)} />
               <button className="buscar"  onClick={ (e) => Buscar() }>
@@ -316,7 +216,7 @@ export default function Usuarios(props) {
               </button>
           </div>
           <div className={ "listagem__list" }>
-            <div className={ "listagem__list-header" }>Usuários</div>
+            <div className={ "listagem__list-header" }>Arquivos</div>
             <div className={ "listagem__list-body" }>
               <Listagem />
             </div>
@@ -348,7 +248,7 @@ export default function Usuarios(props) {
             <button className={ "aviso__cancel" } onClick={ e => { setMsg(`Registro não foi excluido`); setConfirm(false); setX(false) }}>
               Cancelar
             </button>
-            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro foi excluido`); deleteUser(x); setX(false);setConfirm(false); Buscar(); }}>
+            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro foi excluido`); deleteArquivo(x); setX(false);setConfirm(false); Buscar(); }}>
               Confirmar
             </button>
             </>

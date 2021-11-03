@@ -13,6 +13,8 @@ export default function Lojas(props) {
   const user = props.user
   const [dark, setDark] = useState(props.dark)
 
+  const [edit, setEdit] = useState(false)
+
   const [ form, setForm] = useState({
     "id": "",
     "StoreName": "",
@@ -228,6 +230,7 @@ export default function Lojas(props) {
     })
     
     setButton("Salvar")
+    setEdit(true)
 };
 
   function Excluir(id){
@@ -255,6 +258,7 @@ export default function Lojas(props) {
     }
 
     setStore(data)
+    setEdit(false)
 
     setForm({
       "id": "",
@@ -310,7 +314,7 @@ export default function Lojas(props) {
 
   return (
     <>
-      <header>
+      <header className="desktop">
         <h2>
           Lojas
         </h2>
@@ -337,7 +341,7 @@ export default function Lojas(props) {
       </header>
       <div className={ "painel" }>
         <div className={ "cadastro" }>
-          <div className={ "cadastro__container lojas" }>
+          <div className={ "cadastro__container lojas " + (edit ? "editar" : "" ) }>
               <h3>
                 Adicionar novos lojas
               </h3>
@@ -440,10 +444,10 @@ export default function Lojas(props) {
             </button>
             :
             <>
-            <button className={ "aviso__cancel" } onClick={ e => { setMsg(`Registro ${id} não foi excluido`); setConfirm(false); setX(false) }}>
+            <button className={ "aviso__cancel" } onClick={ e => { setMsg(`Registro não foi excluido`); setConfirm(false); setX(false) }}>
               Cancelar
             </button>
-            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro ${id} foi excluido`); deleteStore(x); setX(false);setConfirm(false); Buscar(); }}>
+            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro foi excluido`); deleteStore(x); setX(false);setConfirm(false); Buscar(); }}>
               Confirmar
             </button>
             </>

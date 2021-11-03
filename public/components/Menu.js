@@ -112,7 +112,7 @@ export default function Menu(props) {
 
 
     return (<>
-        <div className={ "menu " + (menu) + (menuActive ? " active" : "") }>
+        <div className={ "menu desktop " + (menu) + (menuActive ? " active" : "") }>
           <div className={ "menu__container" }>
 
             <Logo/>
