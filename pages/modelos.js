@@ -7,6 +7,7 @@ import { setCase, getCasebyWhere , deleteCase, getCasebyId, getCases, getCasesby
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import $ from 'jquery'
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 import { setLog } from '/public/services/logs';
 
@@ -23,6 +24,7 @@ export default function Modelos(props) {
   const [dark, setDark] = useState(props.dark)
   const [edit, setEdit] = useState(false)
 
+  const [formExpand, setFormExpand] = useState(false)
   const [form, setForm] = useState({
     "id": "",
     "image1": "",
@@ -195,6 +197,7 @@ export default function Modelos(props) {
     )
   }
   function Editar(id){
+    setFormExpand(true)
 
     setForm({
       "id": "",
@@ -368,7 +371,15 @@ export default function Modelos(props) {
       });
     });
   }
+  function ExpadirForm (){
+    if(formExpand){
+        setFormExpand(false)
 
+    }else{
+        setFormExpand(true)
+
+    }
+}
   return (
     <>
       <header className="desktop">
@@ -398,9 +409,18 @@ export default function Modelos(props) {
       </header>
       <div className={ "painel" }>
         <div className={ "cadastro" }>
-          <div className={ "cadastro__container " + (edit ? "editar" : "" ) }>
-              <h3>
+          <div className={ "cadastro__container " + (edit ? "editar" : "" ) + (formExpand ? " explode " : " implode ") }>
+              <h3 onClick={ () => ExpadirForm()}>
                 Adicionar novas capas
+                <div className="seta mobile">
+                                {
+                                    formExpand
+                                    ?
+                                        <FaAngleUp />
+                                    :
+                                        <FaAngleDown />
+                                }
+                            </div>
               </h3>
               <form onSubmit={ e => enviarForm(e) }>
                   <input type="hidden" name={ "id" } value={ form.id }/>

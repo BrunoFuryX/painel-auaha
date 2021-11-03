@@ -8,6 +8,12 @@
         border-radius: 10px
         background: var(--bgInner)
         box-shadow: 0 2px 10px #0002
+        @media (max-width 991px)
+            &.implode
+                gap: 0
+                form
+                    height: 0
+                    overflow: hidden
         &.editar
             box-shadow: 0 2px 10px var(--verde)
             border 1px solid var(--verde)
@@ -117,6 +123,9 @@
             letter-spacing: .2px
             line-height: 20px
             color: var(--verde)
+            display: flex
+            align-items: center
+            justify-content: space-between
 
         form
             display: flex

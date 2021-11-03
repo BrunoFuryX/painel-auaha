@@ -57,7 +57,7 @@ export default function HeaderMobile(props) {
         return (
             <li className={"menu__item"}>
                 <a href={props.link}>
-                    <Image src={props.icon} width={props.width} height={props.height} />
+                    <Image src={props.icon} width={props.width} alt={ props.nome } height={props.height} />
                     {props.nome}
                 </a>
             </li>
@@ -101,7 +101,7 @@ export default function HeaderMobile(props) {
     const Expand = (props) => {
 
         return <button className={"menu__item"} onClick={toggleMenu}>
-            <Image src={menuActive ? minimizar : expandir} width={15} height={15} />
+            <Image src={menuActive ? minimizar : expandir} alt="expandir" width={15} height={15} />
             {!menuActive
                 ? "Expandir menu"
                 : "Minimizar menu"

@@ -5,6 +5,8 @@ import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
 
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+
 import $ from 'jquery'
 
 import { setLog } from '/public/services/logs';
@@ -16,6 +18,9 @@ export default function Usuarios(props) {
     const user = props.user
     const [dark, setDark] = useState(props.dark)
     const [edit, setEdit] = useState(false)
+
+    const [formExpand, setFormExpand] = useState(false)
+
 
     const [id, setId] = useState("")
     const [name, setName] = useState("")
@@ -200,6 +205,7 @@ export default function Usuarios(props) {
 
 
         })
+        setFormExpand(true)
         $("html, body").animate({ scrollTop: 0 }, "slow");
     }
     function Excluir(id) {
@@ -272,7 +278,15 @@ export default function Usuarios(props) {
         Buscar()
     }
 
+    function ExpadirForm (){
+        if(formExpand){
+            setFormExpand(false)
 
+        }else{
+            setFormExpand(true)
+
+        }
+    }
 
     return (
         <>
@@ -303,9 +317,18 @@ export default function Usuarios(props) {
             </header>
             <div className={"painel"}>
                 <div className={"cadastro"}>
-                    <div className={"cadastro__container " + (edit ? "editar" : "")}>
-                        <h3>
+                    <div className={"cadastro__container " + (edit ? " editar " : "") + (formExpand ? " explode " : " implode ")}>
+                        <h3 onClick={ () => ExpadirForm()}>
                             Adicionar novos usuários
+                            <div className="seta mobile">
+                                {
+                                    formExpand
+                                    ?
+                                        <FaAngleUp />
+                                    :
+                                        <FaAngleDown />
+                                }
+                            </div>
                         </h3>
                         <form onSubmit={e => enviarForm(e)}>
                             <input type="hidden" name={"id"} value={id} />

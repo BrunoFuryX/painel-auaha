@@ -6,6 +6,7 @@ import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere
 import $ from 'jquery';
 import { setLog } from '/public/services/logs';
 
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 import sair from "/public/images/sair.svg"
 import { async } from '@firebase/util';
@@ -37,6 +38,7 @@ export default function Lojas(props) {
   const [ search, setSearch] = useState("")
   const [ searchCampo, setSearchCampo] = useState(false)
 
+  const [formExpand, setFormExpand] = useState(false)
   const [ button, setButton] = useState("Adicionar")
 
   const [ msg, setMsg] = useState(false)
@@ -74,7 +76,15 @@ export default function Lojas(props) {
       })
     }
   }
+  function ExpadirForm (){
+    if(formExpand){
+        setFormExpand(false)
 
+    }else{
+        setFormExpand(true)
+
+    }
+}
   const Listagem = (props) => {
     let listafeita
     if(lista){
@@ -201,6 +211,7 @@ export default function Lojas(props) {
 
   const Editar = (id) => {
     var id = id
+    setFormExpand(true)
     
     setForm({
       "id": "",
@@ -367,9 +378,18 @@ export default function Lojas(props) {
       </header>
       <div className={ "painel" }>
         <div className={ "cadastro" }>
-          <div className={ "cadastro__container lojas " + (edit ? "editar" : "" ) }>
-              <h3>
+          <div className={ "cadastro__container lojas " + (edit ? "editar" : "" )  + (formExpand ? " explode " : " implode ")}>
+              <h3 onClick={ () => ExpadirForm()}>
                 Adicionar novos lojas
+                <div className="seta mobile">
+                                {
+                                    formExpand
+                                    ?
+                                        <FaAngleUp />
+                                    :
+                                        <FaAngleDown />
+                                }
+                            </div>
               </h3>
               <form onSubmit={ e => enviarForm(e) }>
                   <input type="hidden" name={ "id" } value={ form.id }/>
