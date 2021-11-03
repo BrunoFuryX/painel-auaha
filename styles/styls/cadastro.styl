@@ -71,6 +71,8 @@
                 width: 100%
                 max-width: 1200px
                 box-sizing: border-box;
+                @media (max-width 991px)
+                    padding: 15px 10px
 
                 .checkbox
                     display: flex
@@ -78,7 +80,9 @@
                     align-items: center
                     position relative
                     margin: 0
-                    width: 47%;
+                    @media (min-width 991px)
+                        width: 47%;
+
                     &:hover 
                         input ~ .check 
                             background-color: #fff2;
