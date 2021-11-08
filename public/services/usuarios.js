@@ -24,8 +24,14 @@ const getUserbyId = async (id) => {
     return response
 }
 
-const getUsers = async () => {
-    const querySnapshot = await getDocs(usersRef)
+const getUsers = async (lojaUser) => {
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(usersRef, where("store", "==", lojaUser)))
+    }else{
+        querySnapshot = await getDocs(usersRef)
+    }
+      
 
     var response = []
 
@@ -61,8 +67,15 @@ const getUsers = async () => {
 }
 
 const getUsersbyOrder = async (order) => {
-    const querySnapshot = await getDocs(query(usersRef, orderBy(order)));
 
+
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(usersRef, where("store", "==", lojaUser), orderBy(order)))
+    }else{
+        querySnapshot = await getDocs(query(usersRef), orderBy(order));
+    }
+      
     var response = []
 
     querySnapshot.forEach( async(doc) => {
@@ -92,8 +105,9 @@ const getUsersbyOrder = async (order) => {
 
     return response
 }
-const getRecentUsers = async ( valor) => {
-    const querySnapshot = await getDocs(query(usersRef, where("store", '>=', valor), where("store", '<=', valor +'\uf8ff'), limit(4)));
+const getRecentUsers = async ( lojaUser) => {
+    var querySnapshot = await getDocs(query(usersRef, where("store", "==", lojaUser), limit(4)))
+
     var response = []
 
     querySnapshot.forEach( (doc) => {
@@ -107,8 +121,13 @@ const getRecentUsers = async ( valor) => {
     return response
 }
 
-const getUsersbyWhere = async (campo, valor) => {
-    const querySnapshot = await getDocs(query(usersRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
+const getUsersbyWhere = async (campo, valor, lojaUser) => {
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(usersRef, where("store", "==", lojaUser), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')))
+    }else{
+        querySnapshot = await getDocs(query(usersRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
+    }
 
     var response = []
 

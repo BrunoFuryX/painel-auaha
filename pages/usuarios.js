@@ -35,7 +35,7 @@ export default function Usuarios(props) {
   const [ lista, setLista] = useState([])
 
   useEffect( ()=>{
-    getUsers().then((response) => {
+    getUsers(user.store).then((response) => {
       setTimeout(() => {
         setLista(response)
       }, 500);
@@ -60,7 +60,7 @@ export default function Usuarios(props) {
     })
 
     if(searchCampo && search){
-      getUsersbyWhere(searchCampo, search).then( (response) => {
+      getUsersbyWhere(searchCampo, search, user.store).then( (response) => {
         setTimeout(() => {
 
           setLista(response)
@@ -68,7 +68,7 @@ export default function Usuarios(props) {
 
       })
     }else{
-      getUsers().then( (response) => {
+      getUsers(user.store).then( (response) => {
         setTimeout(() => {
 
         setLista(response)
@@ -282,8 +282,14 @@ export default function Usuarios(props) {
                   <select name={ "lvl" } value={ lvl } onChange={(e) => setLvl(e.target.value)} >
                     <option value={ "Usuario" }>Usuario</option>
                     <option value={ "Gerente" }>Gerente</option>
-                    <option value={ "Admin" }>Admin</option>
-                    <option value={ "Master" }>Master</option>
+                    {user.lvl == "Master"
+                    ?
+                    <>
+                      <option value={ "Admin" }>Admin</option>
+                      <option value={ "Master" }>Master</option>
+                    </>
+                    :null}
+                    
                   </select>
                   <select name={ "store" } value={ user.store ? user.store : store } readOnly={ user.store ? true : false }  onChange={(e) => setStore(e.target.value)}>
                     <option value={ "" }>Auaha</option>
@@ -301,8 +307,13 @@ export default function Usuarios(props) {
               <select name={ "searchCampo" } value={ searchCampo }  onChange={(e) => setSearchCampo(e.target.value)}>
                 <option value={ "" }>Selecione</option>
                 <option value={ "name" }>Nome</option>
-                <option value={ "store" }>Loja(ID)</option>
                 <option value={ "email" }>E-mail</option>
+                {user.lvl == "Master" || user.lvl == "Admin"
+                ?
+                <>
+                  <option value={ "store" }>Loja(ID)</option>
+                </>
+                :null}
               </select>
               <input name={ "search" } value={ search } placeholder={ "Buscar" } onChange={(e) => setSearch(e.target.value)} />
               <button className="buscar"  onClick={ (e) => Buscar() }>

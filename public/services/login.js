@@ -1,31 +1,30 @@
 import app from "./firebase"
-import { getFirestore, collection, query, where, getDocs } from "firebase/firestore"
+import { getFirestore, collection, deleteDoc , getDoc, getDocs, setDoc, addDoc , doc, query, orderBy, where, limit } from "firebase/firestore"
 
 const db = getFirestore(app)
 const usersRef = collection(db, "user")
 const storesRef = collection(db, "store")
 
-
 const Login = async (email, senha) => {
-    // const q = query(usersRef, where("email", "==", email));
-    const querySnapshot = await getDocs(usersRef);
+    const q = query(usersRef, where("email", "==", email));
+    const querySnapshot = await getDocs(q);
 
     let response = {logged: false, user: {}, msg: "E-mail ou senha incorretos!"}
     
-    querySnapshot.forEach((doc) => {
-        if(doc.data().email == email && doc.data().password == senha){
+    querySnapshot.forEach((document) => {
+        if(document.data().email == email && document.data().password == senha){
             response.logged = true
             response.store = {}
             response.user = {
-                email: doc.data().email,
-                lvl: doc.data().lvl,
-                name: doc.data().name,
-                store: doc.data().store,
-                foto: doc.data().foto ? doc.data().foto : false
+                email: document.data().email,
+                lvl: document.data().lvl,
+                name: document.data().name,
+                store: document.data().store,
+                foto: document.data().foto ? document.data().foto : false
             }
             response.msg = false 
-            if(doc.data().store != "" && doc.data().store){
-                const docRef = doc(db, "store", doc.data().store);
+            if(document.data().store != "" && document.data().store){
+                const docRef = doc(storesRef, document.data().store);
                 getDoc(docRef).then((response) =>{
                     if (response.exists()) {
                         response.store = docSnap.data();
