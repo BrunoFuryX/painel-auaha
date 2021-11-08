@@ -81,27 +81,27 @@ export default function Menu(props) {
               </>
               : null
             }
-            {store.CustomCase == "on"?
+            {store.CustomCase == "on" || user.lvl == "Admin" || user.lvl == "Master"?
             <>
             < NavigatorItem nome={ "Modelos de capas" } icon={ modelosDeCapas } link={ "/modelos" } width={ 18 } height={ 18}/>
             </>
             :null}
-            {store.UploadPhotos == "on"?
+            {store.UploadPhotos == "on" || user.lvl == "Admin" || user.lvl == "Master"?
             <>
             < NavigatorItem nome={ "Fotos" } icon={ fotos } link={ "/fotos" } width={ 18 } height={ 18}/>
             </>
             :null}
-            {store.UploadFiles == "on"?
+            {store.UploadFiles == "on" || user.lvl == "Admin" || user.lvl == "Master"?
             <>
             < NavigatorItem nome={ "Arquivos" } icon={ arquivos } link={ "/arquivos" } width={ 18 } height={ 18}/>
             </>
             :null}
-            {store.CustomCase == "on"?
+            {store.CustomCase == "on" || user.lvl == "Admin" || user.lvl == "Master"?
             <>
             < NavigatorItem nome={ "Capas personalizadas" } icon={ capasPersonalizadas } link={ "/capas" } width={ 18 } height={ 18}/>
             </>
             :null}
-            {store.MeasurementChart == "on"?
+            {store.MeasurementChart == "on" || user.lvl == "Admin" || user.lvl == "Master"?
             <>
             < NavigatorItem nome={ "Tabela de medidas" } icon={ tabelaDeMedidas } link={ "/tabela" } width={ 18 } height={ 18}/>
             </>

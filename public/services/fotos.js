@@ -24,7 +24,12 @@ const getArquivoById = async (id) => {
 }
 
 const getArquivos = async (lojaUser) => {
-    const querySnapshot = await getDocs(query(fileRef, where("loja", "==", lojaUser), orderBy("data", "desc")))
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(fileRef, where("loja", "==", lojaUser), orderBy("data", "desc")))
+    }else{
+        querySnapshot = await getDocs(query(fileRef), orderBy("data", "desc"));
+    }
 
     var response = []
 
@@ -59,8 +64,12 @@ const getArquivos = async (lojaUser) => {
 }
 
 const getArquivosbyOrder = async (order, lojaUser) => {
-    const querySnapshot = await getDocs(query(fileRef, where("store", "==", lojaUser), orderBy(order)));
-
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(fileRef, where("store", "==", lojaUser), orderByorder))
+    }else{
+        querySnapshot = await getDocs(query(fileRef), orderBy(order));
+    }
     var response = []
 
     querySnapshot.forEach( async (doc) => {
@@ -94,8 +103,12 @@ const getArquivosbyOrder = async (order, lojaUser) => {
 }
 
 const getArquivobyWhere = async (campo, valor, lojaUser) => {
-    const querySnapshot = await getDocs(query(fileRef, where("store", "==", lojaUser), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
-
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(fileRef, where("store", "==", lojaUser), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
+    }else{
+        querySnapshot = await getDocs(query(fileRef), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff'));
+    }
     var response = []
 
     querySnapshot.forEach( async (doc) => {
