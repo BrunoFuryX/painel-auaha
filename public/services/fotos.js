@@ -4,12 +4,13 @@ import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere
 
 const db = getFirestore(app)
 
-const logRef = collection(db, "log")
 
-const caseRef = collection(db, "case")
-
-const getCasebyId = async (id) => {
-    const querySnapshot = await getDoc(doc(caseRef, id));
+const fileRef = collection(db, "photo")
+const options = {
+    hourCycle: 'h23'
+}
+const getArquivoById = async (id) => {
+    const querySnapshot = await getDoc(doc(fileRef, id));
 
     let response
     
@@ -22,8 +23,8 @@ const getCasebyId = async (id) => {
     return response
 }
 
-const getCases = async () => {
-    const querySnapshot = await getDocs(caseRef)
+const getArquivos = async (lojaUser) => {
+    const querySnapshot = await getDocs(query(fileRef, where("loja", "==", lojaUser), orderBy("data", "desc")))
 
     var response = []
 
@@ -34,9 +35,10 @@ const getCases = async () => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }else{
@@ -44,9 +46,10 @@ const getCases = async () => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }
@@ -55,8 +58,8 @@ const getCases = async () => {
     return response
 }
 
-const getCasesbyOrder = async (order) => {
-    const querySnapshot = await getDocs(query(caseRef, orderBy(order)));
+const getArquivosbyOrder = async (order, lojaUser) => {
+    const querySnapshot = await getDocs(query(fileRef, where("store", "==", lojaUser), orderBy(order)));
 
     var response = []
 
@@ -67,9 +70,10 @@ const getCasesbyOrder = async (order) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().name,
-                image1: doc.data().email,
-                image2: doc.data().lvl,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }else{
@@ -77,9 +81,10 @@ const getCasesbyOrder = async (order) => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().name,
-                image1: doc.data().email,
-                image2: doc.data().lvl,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }
@@ -88,8 +93,8 @@ const getCasesbyOrder = async (order) => {
     return response
 }
 
-const getCasebyWhere = async (campo, valor) => {
-    const querySnapshot = await getDocs(query(caseRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
+const getArquivobyWhere = async (campo, valor, lojaUser) => {
+    const querySnapshot = await getDocs(query(fileRef, where("store", "==", lojaUser), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
 
     var response = []
 
@@ -100,9 +105,10 @@ const getCasebyWhere = async (campo, valor) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }else{
@@ -110,9 +116,10 @@ const getCasebyWhere = async (campo, valor) => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }
@@ -121,27 +128,26 @@ const getCasebyWhere = async (campo, valor) => {
     return response
 }
 
-const setCase = async (data) => {
+const setArquivo = async (data) => {
     var identificador
     if(data.id){
-        await setDoc(doc(db, "case" , data.id), data);
+        await setDoc(doc(db, "photo" , data.id), data);
         identificador = data.id
     }else{
-        const docRef = await addDoc(caseRef, data);
+        const docRef = await addDoc(fileRef, data);
         identificador = docRef
     }
 
-    await addDoc(logRef, data);
 
     return { msg: "pronto", id: identificador}
     
 }
 
 
-const deleteCase = async (id) => {
-    await deleteDoc(doc(db, "case" , id));
+const deleteArquivo = async (id) => {
+    await deleteDoc(doc(db, "photo" , id));
 
     return { msg: "pronto"}
 }
 
-export { setCase, getCasebyWhere , deleteCase, getCasebyId, getCases, getCasesbyOrder }
+export { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo }

@@ -4,12 +4,14 @@ import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere
 
 const db = getFirestore(app)
 
-const logRef = collection(db, "log")
 
-const caseRef = collection(db, "case")
+const fileRef = collection(db, "casepersonalizada")
+const options = {
+    hourCycle: 'h23'
+}
 
-const getCasebyId = async (id) => {
-    const querySnapshot = await getDoc(doc(caseRef, id));
+const getArquivoById = async (id) => {
+    const querySnapshot = await getDoc(doc(fileRef, id));
 
     let response
     
@@ -22,8 +24,44 @@ const getCasebyId = async (id) => {
     return response
 }
 
-const getCases = async () => {
-    const querySnapshot = await getDocs(caseRef)
+const getArquivos = async () => {
+    const querySnapshot = await getDocs(query(fileRef))
+    var response = []
+
+    console.log("casepersonalizada")
+    querySnapshot.forEach( async (doc) => {
+        console.log(doc.data())
+        const resposta = await getStorebyId(doc.data().loja != "" ? doc.data().loja : "Auaha")
+
+        console.log(doc.data().data  ,new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options))
+
+        if(resposta){
+            var loja = resposta.StoreName
+            response.push({
+                id: doc.id,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+                productId: doc.data().productId,
+                url: doc.data().image,
+                loja: loja
+            });
+        }else{
+            var loja = "Auaha"
+
+            response.push({
+                id: doc.id,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+                productId: doc.data().productId,
+                url: doc.data().image,
+                loja: loja
+            });
+        }
+    });
+
+    return response
+}
+
+const getArquivosbyOrder = async (order) => {
+    const querySnapshot = await getDocs(query(fileRef, orderBy(order)));
 
     var response = []
 
@@ -34,9 +72,9 @@ const getCases = async () => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
                 productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                url: doc.data().image,
                 loja: loja
             });
         }else{
@@ -44,9 +82,9 @@ const getCases = async () => {
 
             response.push({
                 id: doc.id,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
                 productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                url: doc.data().image,
                 loja: loja
             });
         }
@@ -55,8 +93,8 @@ const getCases = async () => {
     return response
 }
 
-const getCasesbyOrder = async (order) => {
-    const querySnapshot = await getDocs(query(caseRef, orderBy(order)));
+const getArquivobyWhere = async (campo, valor) => {
+    const querySnapshot = await getDocs(query(fileRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
 
     var response = []
 
@@ -67,9 +105,9 @@ const getCasesbyOrder = async (order) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().name,
-                image1: doc.data().email,
-                image2: doc.data().lvl,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+                productId: doc.data().productId,
+                url: doc.data().image,
                 loja: loja
             });
         }else{
@@ -77,9 +115,9 @@ const getCasesbyOrder = async (order) => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().name,
-                image1: doc.data().email,
-                image2: doc.data().lvl,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+                productId: doc.data().productId,
+                url: doc.data().image,
                 loja: loja
             });
         }
@@ -88,60 +126,26 @@ const getCasesbyOrder = async (order) => {
     return response
 }
 
-const getCasebyWhere = async (campo, valor) => {
-    const querySnapshot = await getDocs(query(caseRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
-
-    var response = []
-
-    querySnapshot.forEach( async (doc) => {
-        const resposta = await getStorebyId(doc.data().loja != "" ? doc.data().loja : "Auaha")
-
-        if(resposta){
-            var loja = resposta.StoreName
-            response.push({
-                id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
-                loja: loja
-            });
-        }else{
-            var loja = "Auaha"
-
-            response.push({
-                id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
-                loja: loja
-            });
-        }
-    });
-
-    return response
-}
-
-const setCase = async (data) => {
+const setArquivo = async (data) => {
     var identificador
     if(data.id){
-        await setDoc(doc(db, "case" , data.id), data);
+        await setDoc(doc(db, "casepersonalizada" , data.id), data);
         identificador = data.id
     }else{
-        const docRef = await addDoc(caseRef, data);
+        const docRef = await addDoc(fileRef, data);
         identificador = docRef
     }
 
-    await addDoc(logRef, data);
 
     return { msg: "pronto", id: identificador}
     
 }
 
 
-const deleteCase = async (id) => {
-    await deleteDoc(doc(db, "case" , id));
+const deleteArquivo = async (id) => {
+    await deleteDoc(doc(db, "casepersonalizada" , id));
 
     return { msg: "pronto"}
 }
 
-export { setCase, getCasebyWhere , deleteCase, getCasebyId, getCases, getCasesbyOrder }
+export { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo }

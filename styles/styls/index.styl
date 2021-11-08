@@ -2,14 +2,25 @@
     padding: 10px 30px
     &__list
         display: flex
-        justify-content: space-between
-        flex-wrap: wrap
+        justify-content: flex-start;
+        flex-wrap: wrap;
+        gap: 20px
+        @media (max-width 991px)
+            justify-content: center
+
+
+
     &__item
         width: 32%
+        min-width 300px
         margin-top: 15px
         border-radius: 10px
         box-shadow: var(--sombra)
         background: var(--bgInner)
+        font-size: 14px
+
+        @media (max-width 991px)
+            width: 100%
         &-header
             padding: 20px 30px 12px
             border-bottom: 1px solid var(--bg)
@@ -22,7 +33,7 @@
             color: var(--texto)
             padding: 5px 13px 0
             >div
-                height: 50px
+                height: 44px
                 width: 100%
                 display: flex
                 align-items: center

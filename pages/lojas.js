@@ -4,7 +4,9 @@ import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
 import $ from 'jquery';
+import { setLog } from '/public/services/logs';
 
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 import sair from "/public/images/sair.svg"
 import { async } from '@firebase/util';
@@ -12,6 +14,8 @@ import { async } from '@firebase/util';
 export default function Lojas(props) {
   const user = props.user
   const [dark, setDark] = useState(props.dark)
+
+  const [edit, setEdit] = useState(false)
 
   const [ form, setForm] = useState({
     "id": "",
@@ -34,6 +38,7 @@ export default function Lojas(props) {
   const [ search, setSearch] = useState("")
   const [ searchCampo, setSearchCampo] = useState(false)
 
+  const [formExpand, setFormExpand] = useState(false)
   const [ button, setButton] = useState("Adicionar")
 
   const [ msg, setMsg] = useState(false)
@@ -71,7 +76,15 @@ export default function Lojas(props) {
       })
     }
   }
+  function ExpadirForm (){
+    if(formExpand){
+        setFormExpand(false)
 
+    }else{
+        setFormExpand(true)
+
+    }
+}
   const Listagem = (props) => {
     let listafeita
     if(lista){
@@ -198,6 +211,7 @@ export default function Lojas(props) {
 
   const Editar = (id) => {
     var id = id
+    setFormExpand(true)
     
     setForm({
       "id": "",
@@ -218,6 +232,7 @@ export default function Lojas(props) {
       "CustomCase": "",
     })
 
+    $("html, body").animate({ scrollTop: 0 }, "slow");
 
     getStorebyId(id).then(response => {
       let resposta = response
@@ -226,8 +241,10 @@ export default function Lojas(props) {
           id: id
       })
     })
+
     
     setButton("Salvar")
+    setEdit(true)
 };
 
   function Excluir(id){
@@ -235,6 +252,14 @@ export default function Lojas(props) {
     setConfirm(true)
     setPreview(false)
     setX(id)
+    var infos = 
+    { loja: user.store, 
+        usuario: user.name, 
+        data: Date.now().toString(), 
+        info: `${ user.name } excluiu loja ${ id }`
+    }
+    setLog(infos)
+
   }
     
   function enviarForm(e) {
@@ -246,15 +271,31 @@ export default function Lojas(props) {
       setMsg(`Registro ${form.id} editado com sucesso`)
       setConfirm(false)
       setPreview(false)
+      var infos = 
+      { loja: user.store, 
+          usuario: user.name, 
+          data: Date.now().toString(), 
+          info: `${ user.name } editou loja ${ form.id }` 
+      }
+      setLog(infos)
+
 
     }else{
       setMsg(`Novo registro criado com sucesso`)
       setConfirm(false)
       setPreview(false)
+      var infos = 
+      { loja: user.store, 
+          usuario: user.name, 
+          data: Date.now().toString(), 
+          info: `${ user.name } criou loja ${ form.StoreName }`
+      }
+      setLog(infos)
 
     }
 
     setStore(data)
+    setEdit(false)
 
     setForm({
       "id": "",
@@ -310,7 +351,7 @@ export default function Lojas(props) {
 
   return (
     <>
-      <header>
+      <header className="desktop">
         <h2>
           Lojas
         </h2>
@@ -337,9 +378,18 @@ export default function Lojas(props) {
       </header>
       <div className={ "painel" }>
         <div className={ "cadastro" }>
-          <div className={ "cadastro__container lojas" }>
-              <h3>
+          <div className={ "cadastro__container lojas " + (edit ? "editar" : "" )  + (formExpand ? " explode " : " implode ")}>
+              <h3 onClick={ () => ExpadirForm()}>
                 Adicionar novos lojas
+                <div className="seta mobile">
+                                {
+                                    formExpand
+                                    ?
+                                        <FaAngleUp />
+                                    :
+                                        <FaAngleDown />
+                                }
+                            </div>
               </h3>
               <form onSubmit={ e => enviarForm(e) }>
                   <input type="hidden" name={ "id" } value={ form.id }/>
@@ -440,10 +490,10 @@ export default function Lojas(props) {
             </button>
             :
             <>
-            <button className={ "aviso__cancel" } onClick={ e => { setMsg(`Registro ${id} não foi excluido`); setConfirm(false); setX(false) }}>
+            <button className={ "aviso__cancel" } onClick={ e => { setMsg(`Registro não foi excluido`); setConfirm(false); setX(false) }}>
               Cancelar
             </button>
-            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro ${id} foi excluido`); deleteStore(x); setX(false);setConfirm(false); Buscar(); }}>
+            <button className={ "aviso__confirm" } onClick={ e => { setMsg(`Registro foi excluido`); deleteStore(x); setX(false);setConfirm(false); Buscar(); }}>
               Confirmar
             </button>
             </>

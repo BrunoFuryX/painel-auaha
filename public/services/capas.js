@@ -4,7 +4,6 @@ import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere
 
 const db = getFirestore(app)
 
-const logRef = collection(db, "log")
 
 const caseRef = collection(db, "case")
 
@@ -131,7 +130,6 @@ const setCase = async (data) => {
         identificador = docRef
     }
 
-    await addDoc(logRef, data);
 
     return { msg: "pronto", id: identificador}
     

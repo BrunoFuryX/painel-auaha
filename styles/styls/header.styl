@@ -4,9 +4,10 @@ header
     border-bottom: 2px solid var(--bgInner)
     justify-content: space-between
     align-items: center;
-    font-weight: 500
     letter-spacing: .2px
     color: var(--texto)
+    font-size: 14px
+    font-weight: 300
     h2
         color: var(--verde)
         font-size: 18px
@@ -21,6 +22,8 @@ header
         display: flex
         align-items: center
         gap: 20px
+        img
+            border-radius: 50%
     .darkmode
         display: flex
         align-items: center
@@ -30,3 +33,74 @@ header
         display: flex
         align-items: center
         gap: 13px
+
+
+.header--mobile
+    display: flex
+    justify-content: space-between
+    align-items: center
+    position: sticky
+    top: 0
+    width: 100%
+    background: var(--bgMenu)
+    height: 80px
+    z-index 99
+
+    .menu__item
+        padding-left: 30px
+        a
+            font-size: 14px
+    .menu__logo
+        margin: 0
+        padding: 0
+    
+    button
+        background: transparent
+        width: 80px
+        height: 80px
+        display: flex
+        justify-content: center
+        align-items: center
+    .menu1--mobile
+        position: fixed
+        top: 80px
+        left: -100%
+        height: 100%
+        width: 255px
+        background: var(--bgMenu)
+
+        &.active
+            left: 0
+
+    .menu2--mobile
+        position: fixed
+        top: 80px
+        right: -100%
+        width: 255px
+        height: 100%
+        background: var(--bgMenu)
+
+        &.active
+            right: 0
+    .menu2__row
+        height: 54px
+        display: flex
+        justify-content: flex-end
+        gap: 10px
+        padding-right: 30px
+        color: #fff
+        align-items: center
+
+        .darkmode
+            display: flex
+            align-items: center
+            gap: 10px
+        
+        .exit
+            display: flex
+            align-items: center
+            gap: 10px
+
+    .toggleMenu2
+        img
+            border-radius: 50%

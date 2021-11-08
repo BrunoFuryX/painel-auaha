@@ -3,7 +3,6 @@ import { getFirestore, collection, deleteDoc , getDoc, getDocs, setDoc, addDoc ,
 
 const db = getFirestore(app)
 
-const usersRef = collection(db, "user")
 const storesRef = collection(db, "store")
 
 const getStorebyId = async (id) => {

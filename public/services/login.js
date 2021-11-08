@@ -8,8 +8,7 @@ const storesRef = collection(db, "store")
 const Login = async (email, senha) => {
     const q = query(usersRef, where("email", "==", email));
     const querySnapshot = await getDocs(q);
-
-    let response = {logged: false, user: {}, msg: "E-mail ou senha incorretos!"}
+    let response = {logged: false, user: {}, store:{}, msg: "E-mail ou senha incorretos!"}
     
     querySnapshot.forEach((document) => {
         if(document.data().email == email && document.data().password == senha){
@@ -23,19 +22,21 @@ const Login = async (email, senha) => {
                 foto: document.data().foto ? document.data().foto : false
             }
             response.msg = false 
-            if(document.data().store != "" && document.data().store){
-                const docRef = doc(storesRef, document.data().store);
-                getDoc(docRef).then((response) =>{
-                    if (response.exists()) {
-                        response.store = docSnap.data();
-                    } else {
-                        // doc.data() will be undefined in this case
-                    }
-                });
-                
-            }
         }
     });
+
+
+    if(response.user.store != "" && response.user.store){
+        const docRef = doc(storesRef, response.user.store);
+        var docSnap = await getDoc(docRef);
+        console.log(docSnap)
+        if (docSnap.exists()) {
+            response.store = docSnap.data();
+        } else {
+            // doc.data() will be undefined in this case
+        }
+        
+    }
 
     return response
 }

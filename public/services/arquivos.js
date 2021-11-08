@@ -4,10 +4,11 @@ import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere
 
 const db = getFirestore(app)
 
-const logRef = collection(db, "log")
 
 const fileRef = collection(db, "file")
-
+const options = {
+    hourCycle: 'h23'
+}
 const getArquivoById = async (id) => {
     const querySnapshot = await getDoc(doc(fileRef, id));
 
@@ -22,8 +23,14 @@ const getArquivoById = async (id) => {
     return response
 }
 
-const getArquivos = async () => {
-    const querySnapshot = await getDocs(fileRef)
+const getArquivos = async (lojaUser) => {
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(fileRef, where("loja", "==", lojaUser), orderBy("data", "desc")))
+    }else{
+        querySnapshot = await getDocs(query(fileRef), orderBy("data", "desc"));
+    }
+      
 
     var response = []
 
@@ -34,9 +41,9 @@ const getArquivos = async () => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }else{
@@ -44,9 +51,51 @@ const getArquivos = async () => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
+                loja: loja
+            });
+        }
+    });
+
+    console.log(response)
+
+    return response
+}
+
+const getArquivosbyOrder = async (order, lojaUser) => {
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(fileRef, where("store", "==", lojaUser), orderByorder))
+    }else{
+        querySnapshot = await getDocs(query(fileRef), orderBy(order));
+    }
+    var response = []
+
+    querySnapshot.forEach( async (doc) => {
+        const resposta = await getStorebyId(doc.data().loja != "" ? doc.data().loja : "Auaha")
+
+        if(resposta){
+            var loja = resposta.StoreName
+            response.push({
+                id: doc.id,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
+                loja: loja
+            });
+        }else{
+            var loja = "Auaha"
+
+            response.push({
+                id: doc.id,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }
@@ -55,9 +104,13 @@ const getArquivos = async () => {
     return response
 }
 
-const getArquivosbyOrder = async (order) => {
-    const querySnapshot = await getDocs(query(fileRef, orderBy(order)));
-
+const getArquivobyWhere = async (campo, valor, lojaUser) => {
+    var querySnapshot
+    if(lojaUser){
+        querySnapshot = await getDocs(query(fileRef, where("store", "==", lojaUser), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
+    }else{
+        querySnapshot = await getDocs(query(fileRef), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff'));
+    }
     var response = []
 
     querySnapshot.forEach( async (doc) => {
@@ -67,9 +120,10 @@ const getArquivosbyOrder = async (order) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                productId: doc.data().name,
-                image1: doc.data().email,
-                image2: doc.data().lvl,
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
+
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }else{
@@ -77,42 +131,10 @@ const getArquivosbyOrder = async (order) => {
 
             response.push({
                 id: doc.id,
-                productId: doc.data().name,
-                image1: doc.data().email,
-                image2: doc.data().lvl,
-                loja: loja
-            });
-        }
-    });
+                data: new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options),
 
-    return response
-}
-
-const getArquivobyWhere = async (campo, valor) => {
-    const querySnapshot = await getDocs(query(fileRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
-
-    var response = []
-
-    querySnapshot.forEach( async (doc) => {
-        const resposta = await getStorebyId(doc.data().loja != "" ? doc.data().loja : "Auaha")
-
-        if(resposta){
-            var loja = resposta.StoreName
-            response.push({
-                id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
-                loja: loja
-            });
-        }else{
-            var loja = "Auaha"
-
-            response.push({
-                id: doc.id,
-                productId: doc.data().productId,
-                image1: doc.data().image1,
-                image2: doc.data().image2,
+                tipo: doc.data().tipo,
+                url: doc.data().url,
                 loja: loja
             });
         }
@@ -131,7 +153,6 @@ const setArquivo = async (data) => {
         identificador = docRef
     }
 
-    await addDoc(logRef, data);
 
     return { msg: "pronto", id: identificador}
     
@@ -144,4 +165,4 @@ const deleteArquivo = async (id) => {
     return { msg: "pronto"}
 }
 
-export { setCase, getCasebyWhere , deleteCase, getCasebyId, getArquivos, getArquivosbyOrder }
+export { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo }

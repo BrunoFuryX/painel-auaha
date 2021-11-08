@@ -6,6 +6,11 @@ import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, get
 import { setCase, getCasebyWhere , deleteCase, getCasebyId, getCases, getCasesbyOrder } from '/public/services/capas';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import $ from 'jquery'
+import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+
+import { setLog } from '/public/services/logs';
+
 
 import app from "/public/services/firebase"
 import storage from "/public/services/storage"
@@ -17,7 +22,9 @@ import { async } from '@firebase/util';
 export default function Modelos(props) {
   const user = props.user
   const [dark, setDark] = useState(props.dark)
+  const [edit, setEdit] = useState(false)
 
+  const [formExpand, setFormExpand] = useState(false)
   const [form, setForm] = useState({
     "id": "",
     "image1": "",
@@ -190,6 +197,7 @@ export default function Modelos(props) {
     )
   }
   function Editar(id){
+    setFormExpand(true)
 
     setForm({
       "id": "",
@@ -200,6 +208,7 @@ export default function Modelos(props) {
       "loja": "",
       "productId": "",
     })
+    $("html, body").animate({ scrollTop: 0 }, "slow");
 
     getCasebyId(id).then(response => {
       let resposta = response
@@ -208,6 +217,7 @@ export default function Modelos(props) {
           id: id
       })
       setButton("Salvar")
+      setEdit(true)
 
     })
   }
@@ -219,6 +229,14 @@ export default function Modelos(props) {
     setConfirm(true)
     setPreview(data.image1)
     setX(id)
+    var infos = 
+    { loja: user.store, 
+        usuario: user.name, 
+        data: Date.now().toString(), 
+        info: `${ user.name } excluiu modelo ${ id }`
+    }
+    setLog(infos)
+
     console.log("foi")
   }
   const handleChange = (e) => {
@@ -240,11 +258,25 @@ export default function Modelos(props) {
       setMsg(`Registro ${data.id} editado com sucesso`)
       setConfirm(false)
       setPreview( data.image1 )
+      var infos = 
+      { loja: user.store, 
+          usuario: user.name, 
+          data: Date.now().toString(), 
+          info: `${ user.name } editou modelo ${ data.id }`
+      }
+      setLog(infos)
 
     }else{
       setMsg(`Novo registro criado com sucesso`)
       setConfirm(false)
       setPreview(data.image1)
+      var infos = 
+    { loja: user.store, 
+        usuario: user.name, 
+        data: Date.now().toString(), 
+        info: `${ user.name } criou um modelo para a loja ${ form.loja }`
+    }
+    setLog(infos)
 
     }
     setCase(data)
@@ -258,6 +290,7 @@ export default function Modelos(props) {
       "loja": "",
       "productId": "",
     })
+    setEdit(false)
 
     Buscar()
   }
@@ -338,10 +371,18 @@ export default function Modelos(props) {
       });
     });
   }
+  function ExpadirForm (){
+    if(formExpand){
+        setFormExpand(false)
 
+    }else{
+        setFormExpand(true)
+
+    }
+}
   return (
     <>
-      <header>
+      <header className="desktop">
         <h2>
          Modelos de capas
         </h2>
@@ -368,9 +409,18 @@ export default function Modelos(props) {
       </header>
       <div className={ "painel" }>
         <div className={ "cadastro" }>
-          <div className={ "cadastro__container" }>
-              <h3>
+          <div className={ "cadastro__container " + (edit ? "editar" : "" ) + (formExpand ? " explode " : " implode ") }>
+              <h3 onClick={ () => ExpadirForm()}>
                 Adicionar novas capas
+                <div className="seta mobile">
+                                {
+                                    formExpand
+                                    ?
+                                        <FaAngleUp />
+                                    :
+                                        <FaAngleDown />
+                                }
+                            </div>
               </h3>
               <form onSubmit={ e => enviarForm(e) }>
                   <input type="hidden" name={ "id" } value={ form.id }/>

@@ -6,7 +6,6 @@ const db = getFirestore(app)
 
 const usersRef = collection(db, "user")
 
-const logRef = collection(db, "log")
 
 const storesRef = collection(db, "store")
 
@@ -169,7 +168,6 @@ const setUser = async (data) => {
         identificador = docRef
     }
 
-    await addDoc(logRef, data);
 
     return { msg: "pronto", id: identificador}
     

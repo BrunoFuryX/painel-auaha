@@ -25,6 +25,7 @@ import minimizar from "/public/images/minimizar.svg"
 export default function Menu(props) {
     const user = props.user ? props.user : {}
     var darkmode = props.darkmode
+    var store = props.store
 
     const [menu, setMenu] = useState("close")
     const [menuActive, setMenuActive] = useState(false)
@@ -80,30 +81,48 @@ export default function Menu(props) {
               </>
               : null
             }
-
+            {store.CustomCase == "on"?
+            <>
             < NavigatorItem nome={ "Modelos de capas" } icon={ modelosDeCapas } link={ "/modelos" } width={ 18 } height={ 18}/>
-
+            </>
+            :null}
+            {store.UploadPhotos == "on"?
+            <>
             < NavigatorItem nome={ "Fotos" } icon={ fotos } link={ "/fotos" } width={ 18 } height={ 18}/>
-
+            </>
+            :null}
+            {store.UploadFiles == "on"?
+            <>
             < NavigatorItem nome={ "Arquivos" } icon={ arquivos } link={ "/arquivos" } width={ 18 } height={ 18}/>
-
+            </>
+            :null}
+            {store.CustomCase == "on"?
+            <>
             < NavigatorItem nome={ "Capas personalizadas" } icon={ capasPersonalizadas } link={ "/capas" } width={ 18 } height={ 18}/>
-
+            </>
+            :null}
+            {store.MeasurementChart == "on"?
+            <>
             < NavigatorItem nome={ "Tabela de medidas" } icon={ tabelaDeMedidas } link={ "/tabela" } width={ 18 } height={ 18}/>
+            </>
+            :null}
+            
         </ul>;
     }
     function toggleMenu(){
-      if(menuActive == true){
+      if(expandir == true){
         setMenuActive(false)
+        props.Exp()
       }else{
         setMenuActive(true)
+        props.Exp()
       }
     }
     const Expand = (props) => {
         
-        return <button className={ "menu__item" } onClick={ toggleMenu }>
-            <Image src={ menuActive ? minimizar : expandir } width={ 15 } height={ 15 }/>
-            {!menuActive
+        return <button className={ "menu__item" } onClick={ () => {toggleMenu(); } }>
+            <Image src={ expandir ? minimizar : expandir } width={ 15 } height={ 15 }/>
+            {!expandir
             ? "Expandir menu"
             : "Minimizar menu"
             }
@@ -112,7 +131,7 @@ export default function Menu(props) {
 
 
     return (<>
-        <div className={ "menu " + (menu) + (menuActive ? " active" : "") }>
+        <div className={ "menu desktop " + (menu) + (expandir ? " active" : "") }>
           <div className={ "menu__container" }>
 
             <Logo/>
