@@ -23,11 +23,11 @@ export default function Usuarios(props) {
 
 
   const [id, setId] = useState("")
-  const [name, setName] = useState("")
-  const [email, setEmail] = useState("")
-  const [password, setPassword] = useState("")
-  const [lvl, setLvl] = useState("Usuario")
+  const [title, setTitle] = useState("")
   const [store, setStore] = useState("")
+  const [productId, setProductId] = useState("")
+  const [tabela, setTabela] = useState([["", ""], ["", ""]])
+
 
   const [search, setSearch] = useState("")
   const [searchCampo, setSearchCampo] = useState(false)
@@ -100,29 +100,23 @@ export default function Usuarios(props) {
               </b>
               {item.id}
             </div>
-            <div className={"nome"}>
-              <b>
-                Nome:
-              </b>
-              {item.name}
-            </div>
-            <div className={"email"}>
-              <b>
-                E-mail:
-              </b>
-              {item.email}
-            </div>
             <div className={"loja"}>
               <b>
                 Loja:
               </b>
               {item.store}
             </div>
-            <div className={"nivel"}>
+            <div className={"productId"}>
               <b>
-                Nivel de Acesso:
+                ID do Produto:
               </b>
-              {item.lvl}
+              {item.email}
+            </div>
+            <div className={"title"}>
+              <b>
+                Titulo:
+              </b>
+              {item.name}
             </div>
             <div className={"acoes"}>
               <b>
@@ -156,24 +150,19 @@ export default function Usuarios(props) {
               ID
             </div>
           </div>
-          <div className={"nome"}>
-            <div>
-              Nome
-            </div>
-          </div>
-          <div className={"email"}>
-            <div>
-              E-mail
-            </div>
-          </div>
           <div className={"loja"}>
             <div>
               Loja
             </div>
           </div>
-          <div className={"nivel"}>
+          <div className={"productId"}>
             <div>
-              Nivel de Acesso
+              ID do Produto
+            </div>
+          </div>
+          <div className={"title"}>
+            <div>
+              Titulo
             </div>
           </div>
           <div className={"acoes"}>
@@ -194,11 +183,10 @@ export default function Usuarios(props) {
   function Editar(id) {
     getUserbyId(id).then(response => {
       setId(id)
-      setEmail(response.email)
-      setLvl(response.lvl)
-      setName(response.name)
+      setTitle(response.title)
       setStore(response.store)
-      setPassword(response.password)
+      setProductId(response.productId)
+      setTabela(response.tabela)
       setButton("Salvar")
       setEdit(true)
 
@@ -218,7 +206,7 @@ export default function Usuarios(props) {
       loja: user.store,
       usuario: user.name,
       data: Date.now().toString(),
-      info: `${user.name} excluiu usuário ${id}`
+      info: `${user.name} excluiu a tabela ${id}`
     }
     setLog(infos)
 
@@ -229,11 +217,10 @@ export default function Usuarios(props) {
 
     const data = {
       id,
-      name,
-      email,
-      password,
-      lvl,
-      store
+      productId,
+      store,
+      title,
+      tabela
     }
 
     if (id) {
@@ -245,7 +232,7 @@ export default function Usuarios(props) {
         loja: user.store,
         usuario: user.name,
         data: Date.now().toString(),
-        info: `${user.name} editou usuário ${id}`
+        info: `${user.name} editou a tabela ${id}`
       }
       setLog(infos)
 
@@ -261,7 +248,7 @@ export default function Usuarios(props) {
         loja: user.store,
         usuario: user.name,
         data: Date.now().toString(),
-        info: `${user.name} criou um novo usuário`
+        info: `${user.name} criou uma nova tabela`
       }
       setLog(infos)
     }
@@ -269,10 +256,7 @@ export default function Usuarios(props) {
     setUser(data)
 
     setId("")
-    setName("")
-    setEmail("")
-    setPassword("")
-    setLvl("Usuario")
+    setTitle("")
     setStore("")
     setButton("Adicionar")
     setEdit(false)
@@ -290,11 +274,137 @@ export default function Usuarios(props) {
     }
   }
 
+  async function addColumn() {
+    console.log("Coluna")
+    console.log(tabela.length)
+
+    var newarraya = []
+    for (var i = 0; i < tabela.length; i++) {
+      newarraya.push([]);
+      for (var i2 = 0; i2 <= tabela[0].length; i2++) {
+        newarraya[i].push(tabela[i][i2]);
+      }
+    }
+    setTabela(newarraya)
+  }
+  function addRow() {
+    console.log("Linha")
+    
+    var newarraya = []
+    for (var i = 0; i <= tabela.length; i++) {
+      newarraya.push([]);
+      for (var i2 = 0; i2 < tabela[0].length; i2++) {
+        newarraya[i].push(tabela[i][i2]);
+      }
+    }
+    setTabela(newarraya)
+  }
+
+  function editColumn(e, index1, index2) {
+    var value = e.target.value
+    var index1, index2 = [index1, index2] 
+    
+    console.log(index1, index2)
+
+    var newarraya = tabela
+    newarraya[index1][index2] = value
+    setTabela(newarraya)
+  }
+
+  const FormTabela = (props) => {
+    var linhas = props.linhas
+    var colunas = props.colunas
+
+
+    function renderRow(row) {
+      let columns = []
+      for (let i = 0; i < colunas; i++) {
+        columns.push(i)
+      }
+      return <><div className="row" key={row}>
+        {columns.map((value) => {
+          return renderColumn(value, row)
+        })}
+      </div>
+        {row == linhas - 1 ?
+          <button className="add row" onClick={(e) => addRow()} type="button">
+            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
+              <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
+                <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+                <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+                  <circle cx="20" cy="20" r="20" stroke="none" />
+                  <circle cx="20" cy="20" r="19" fill="none" />
+                </g>
+              </g>
+            </svg>
+          </button>
+          : null
+        }
+      </>
+    }
+
+    function renderColumn(column, row) {
+      return <><input
+        name={"tabela[" + row + "][" + column + "]"}
+        value={tabela[row][column]}
+        placeholder={""}
+        onChange={(e) => editColumn(e, row, column)} />
+        {column == colunas - 1 && colunas < 8 ?
+          <button className="add column" onClick={(e) => addColumn()} type="button">
+            {row == 0 ?
+              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
+                <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
+                  <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+                  <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+                    <circle cx="20" cy="20" r="20" stroke="none" />
+                    <circle cx="20" cy="20" r="19" fill="none" />
+                  </g>
+                </g>
+              </svg>
+              : null}
+          </button>
+          : null
+        }
+      </>
+    }
+    let rows = []
+    for (let i = 0; i < linhas; i++) {
+      rows.push(i)
+    }
+    console.log(rows)
+    return (
+      <div className="tabela-de-medidas">
+        {rows.map((value) => {
+
+          return renderRow(value)
+        })}
+      </div>
+    )
+  }
+
+
+
+  // {index1 == linhas ?
+  //   <button className="add row">
+  //     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
+  //       <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
+  //         <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+  //         <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+  //           <circle cx="20" cy="20" r="20" stroke="none" />
+  //           <circle cx="20" cy="20" r="19" fill="none" />
+  //         </g>
+  //       </g>
+  //     </svg>
+  //   </button>
+  //   : null
+  // }
+
+
   return (
     <>
       <header className="desktop">
         <h2>
-        Tabela de medidas
+          Tabela de medidas
         </h2>
         <div>
           <div className={"customer"}>
@@ -319,7 +429,7 @@ export default function Usuarios(props) {
       </header>
       <div className={"painel"}>
         <div className={"cadastro"}>
-          <div className={"cadastro__container " + (edit ? " editar " : "") + (formExpand ? " explode " : " implode ")}>
+          <div className={"cadastro__container tabela" + (edit ? " editar " : "") + (formExpand ? " explode " : " implode ")}>
             <h3 onClick={() => ExpadirForm()}>
               Criar tabela de medidas
               <div className="seta mobile">
@@ -334,20 +444,6 @@ export default function Usuarios(props) {
             </h3>
             <form onSubmit={e => enviarForm(e)}>
               <input type="hidden" name={"id"} value={id} />
-              <input name={"name"} value={name} placeholder={"Nome"} onChange={(e) => setName(e.target.value)} />
-              <input name={"email"} value={email} placeholder={"E-mail"} onChange={(e) => setEmail(e.target.value)} />
-              <input type="password" name={"password"} placeholder={"Senha"} value={password} onChange={(e) => setPassword(e.target.value)} />
-              <select name={"lvl"} value={lvl} onChange={(e) => setLvl(e.target.value)} >
-                <option value={"Usuario"}>Usuario</option>
-                <option value={"Gerente"}>Gerente</option>
-                {user.lvl == "Master"
-                  ?
-                  <>
-                    <option value={"Admin"}>Admin</option>
-                    <option value={"Master"}>Master</option>
-                  </>
-                  : null}
-              </select>
               <select name={"store"} value={user.store ? user.store : store} readOnly={user.store ? true : false} onChange={(e) => setStore(e.target.value)}>
                 <option value={""}>Auaha</option>
                 {lojas.map(element => {
@@ -355,6 +451,9 @@ export default function Usuarios(props) {
                   return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
                 })}
               </select>
+              <input name={"productId"} value={productId} placeholder={"ID do Produto"} onChange={(e) => setProductId(e.target.value)} />
+              <input name={"title"} value={title} placeholder={"Titulo da Tabela"} onChange={(e) => setTitle(e.target.value)} />
+              <FormTabela linhas={tabela.length} colunas={tabela[1].length} />
               <button type="submit">{button}</button>
             </form>
           </div>
@@ -365,8 +464,8 @@ export default function Usuarios(props) {
               <option value={""}>Selecione</option>
               <option value={"name"}>Nome</option>
               {user.store != "" ||
-                  <option value={ "store" }>Loja(ID)</option>
-                }
+                <option value={"store"}>Loja(ID)</option>
+              }
               <option value={"email"}>E-mail</option>
             </select>
             <input name={"search"} value={search} placeholder={"Buscar"} onChange={(e) => setSearch(e.target.value)} />

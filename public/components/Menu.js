@@ -14,8 +14,8 @@ import modelosDeCapas from "/public/images/modelosDeCapas.svg"
 import tabelaDeMedidas from "/public/images/tabelaDeMedidas.svg"
 import usuarios from "/public/images/usuarios.svg"
 
-import expandir from "/public/images/expandir.svg"
-import minimizar from "/public/images/minimizar.svg"
+import mais from "/public/images/expandir.svg"
+import menos from "/public/images/minimizar.svg"
 
 
 
@@ -26,7 +26,7 @@ export default function Menu(props) {
     const user = props.user ? props.user : {}
     var darkmode = props.darkmode
     var store = props.store
-
+    var expandir = props.expandir
     const [menu, setMenu] = useState("close")
     const [menuActive, setMenuActive] = useState(false)
 
@@ -121,7 +121,7 @@ export default function Menu(props) {
     const Expand = (props) => {
         
         return <button className={ "menu__item" } onClick={ () => {toggleMenu(); } }>
-            <Image src={ expandir ? minimizar : expandir } width={ 15 } height={ 15 }/>
+            <Image src={ expandir ? mais : menos } width={ 15 } height={ 15 }/>
             {!expandir
             ? "Expandir menu"
             : "Minimizar menu"
