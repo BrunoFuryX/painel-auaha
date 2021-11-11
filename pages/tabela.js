@@ -54,7 +54,6 @@ export default function Usuarios(props) {
     getStores().then((response) => {
       setTimeout(() => {
         setLojas(response)
-        console.log(lojas)
 
       }, 500);
     })
@@ -275,130 +274,92 @@ export default function Usuarios(props) {
   }
 
   async function addColumn() {
-    console.log("Coluna")
-    console.log(tabela.length)
 
-    var newarraya = []
-    for (var i = 0; i < tabela.length; i++) {
-      newarraya.push([]);
-      for (var i2 = 0; i2 <= tabela[0].length; i2++) {
-        newarraya[i].push(tabela[i][i2]);
-      }
-    }
-    setTabela(newarraya)
+    setTabela((prevArray) => [
+      ...prevArray,
+      prevArray[tabela.length] = []
+    ])
   }
   function addRow() {
-    console.log("Linha")
-    
-    var newarraya = []
-    for (var i = 0; i <= tabela.length; i++) {
-      newarraya.push([]);
-      for (var i2 = 0; i2 < tabela[0].length; i2++) {
-        newarraya[i].push(tabela[i][i2]);
-      }
-    }
-    setTabela(newarraya)
+
+    setTabela((prevArray) => [
+      ...prevArray,
+      prevArray[tabela.length] = []
+    ])
   }
 
-  function editColumn(e, index1, index2) {
-    var value = e.target.value
-    var index1, index2 = [index1, index2] 
-    
-    console.log(index1, index2)
+  function editColumn(e, row, column) {
 
-    var newarraya = tabela
-    newarraya[index1][index2] = value
-    setTabela(newarraya)
+    console.log('linha: ' + row);
+    console.log('coluna: ' + column);
+    console.log('nome: ' + e.target.name);
+    let newArr = [...tabela]; // copying the old datas array
+    newArr[row][column] = e.target.value; // replace e.target.value with whatever you want to change it to
+    setTabela(newArr);
   }
 
   const FormTabela = (props) => {
-    var linhas = props.linhas
-    var colunas = props.colunas
 
 
-    function renderRow(row) {
-      let columns = []
-      for (let i = 0; i < colunas; i++) {
-        columns.push(i)
-      }
-      return <><div className="row" key={row}>
-        {columns.map((value) => {
-          return renderColumn(value, row)
-        })}
-      </div>
-        {row == linhas - 1 ?
-          <button className="add row" onClick={(e) => addRow()} type="button">
-            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
-              <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-                <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
-                  <circle cx="20" cy="20" r="20" stroke="none" />
-                  <circle cx="20" cy="20" r="19" fill="none" />
-                </g>
-              </g>
-            </svg>
-          </button>
-          : null
-        }
-      </>
-    }
-
-    function renderColumn(column, row) {
-      return <><input
-        name={"tabela[" + row + "][" + column + "]"}
-        value={tabela[row][column]}
-        placeholder={""}
-        onChange={(e) => editColumn(e, row, column)} />
-        {column == colunas - 1 && colunas < 8 ?
-          <button className="add column" onClick={(e) => addColumn()} type="button">
-            {row == 0 ?
-              <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
-                <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                  <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-                  <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
-                    <circle cx="20" cy="20" r="20" stroke="none" />
-                    <circle cx="20" cy="20" r="19" fill="none" />
-                  </g>
-                </g>
-              </svg>
-              : null}
-          </button>
-          : null
-        }
-      </>
-    }
-    let rows = []
-    for (let i = 0; i < linhas; i++) {
-      rows.push(i)
-    }
-    console.log(rows)
     return (
       <div className="tabela-de-medidas">
-        {rows.map((value) => {
+        {tabela.map((value, i) => {
+          var linhas = tabela.length
+          var colunas = tabela[0].length
+          var row = value
+          var indexRow = i
+          console.log(indexRow, row)
+          return <>
+            <div className="row" key={row}>
+              {row.map((value2, i2) => {
+                var column = value2
+                var indexColumn = i2
+                console.log(indexColumn, column)
 
-          return renderRow(value)
+                return <>
+                  <input
+                    name={"tabela[" + indexRow + "][" + indexColumn + "]"}
+                    value={tabela[indexRow][indexColumn]}
+                    placeholder={""}
+                    onChange={(e) => editColumn(e, indexRow, indexColumn)} />
+                  {indexColumn == colunas - 1 && colunas < 8 ?
+                    <button className="add column" onClick={(e) => addColumn()} type="button">
+                      {indexRow == 0 ?
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
+                          <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
+                            <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+                            <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+                              <circle cx="20" cy="20" r="20" stroke="none" />
+                              <circle cx="20" cy="20" r="19" fill="none" />
+                            </g>
+                          </g>
+                        </svg>
+                        : null}
+                    </button>
+                    : null
+                  }
+                </>
+              })}
+            </div>
+            {indexRow == linhas - 1 ?
+              <button className="add row" onClick={(e) => addRow()} type="button">
+                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
+                  <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
+                    <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+                    <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+                      <circle cx="20" cy="20" r="20" stroke="none" />
+                      <circle cx="20" cy="20" r="19" fill="none" />
+                    </g>
+                  </g>
+                </svg>
+              </button>
+              : null
+            }
+          </>
         })}
       </div>
     )
   }
-
-
-
-  // {index1 == linhas ?
-  //   <button className="add row">
-  //     <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
-  //       <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-  //         <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-  //         <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
-  //           <circle cx="20" cy="20" r="20" stroke="none" />
-  //           <circle cx="20" cy="20" r="19" fill="none" />
-  //         </g>
-  //       </g>
-  //     </svg>
-  //   </button>
-  //   : null
-  // }
-
 
   return (
     <>
@@ -414,7 +375,7 @@ export default function Usuarios(props) {
           <div className={"darkmode"}>
             Modo Escuro
             <div className="onoffswitch">
-              <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="myonoffswitch" defaultChecked={dark ? true : false} onChange={() => props.Darkmode()} />
+              <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="myonoffswitch" checked={dark ? true : false} onChange={() => props.Darkmode()} />
               <label className="onoffswitch-label" htmlFor="myonoffswitch">
                 <div className="onoffswitch-inner"></div>
                 <div className="onoffswitch-switch"></div>
@@ -453,7 +414,66 @@ export default function Usuarios(props) {
               </select>
               <input name={"productId"} value={productId} placeholder={"ID do Produto"} onChange={(e) => setProductId(e.target.value)} />
               <input name={"title"} value={title} placeholder={"Titulo da Tabela"} onChange={(e) => setTitle(e.target.value)} />
-              <FormTabela linhas={tabela.length} colunas={tabela[1].length} />
+              {/* Inicio Tabelas */}
+
+              <div className="tabela-de-medidas">
+                {tabela.map((value, i) => {
+                  var linhas = tabela.length
+                  var colunas = tabela[0].length
+                  var row = value
+                  var indexRow = i
+                  console.log(indexRow, row)
+                  return <>
+                    <div className="row" key={row}>
+                      {row.map((value2, i2) => {
+                        var column = value2
+                        var indexColumn = i2
+                        console.log(indexColumn, column)
+
+                        return <>
+                          <input
+                            name={"tabela[" + indexRow + "][" + indexColumn + "]"}
+                            value={tabela[indexRow][indexColumn]}
+                            placeholder={""}
+                            onChange={(e) => editColumn(e, indexRow, indexColumn)} />
+                          {indexColumn == colunas - 1 && colunas < 8 ?
+                            <button className="add column" onClick={(e) => addColumn()} type="button">
+                              {indexRow == 0 ?
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
+                                  <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
+                                    <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+                                    <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+                                      <circle cx="20" cy="20" r="20" stroke="none" />
+                                      <circle cx="20" cy="20" r="19" fill="none" />
+                                    </g>
+                                  </g>
+                                </svg>
+                                : null}
+                            </button>
+                            : null
+                          }
+                        </>
+                      })}
+                    </div>
+                    {indexRow == linhas - 1 ?
+                      <button className="add row" onClick={(e) => addRow()} type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
+                          <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
+                            <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+                            <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+                              <circle cx="20" cy="20" r="20" stroke="none" />
+                              <circle cx="20" cy="20" r="19" fill="none" />
+                            </g>
+                          </g>
+                        </svg>
+                      </button>
+                      : null
+                    }
+                  </>
+                })}
+              </div>
+              {/* Fim Tabelas */}
+
               <button type="submit">{button}</button>
             </form>
           </div>

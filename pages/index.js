@@ -13,7 +13,7 @@ import sair from "/public/images/sair.svg"
 
 export default function Home(props) {
   const user = props.user
-  const [dark, setDark] = useState(props.dark)
+  var dark = props.dark
 
   const [usersList, setUsersList] = useState([])
   const [storesList, setStoresList] = useState([])
@@ -66,7 +66,7 @@ export default function Home(props) {
           <div className={"darkmode"}>
             Modo Escuro
             <div className="onoffswitch">
-              <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="myonoffswitch" defaultChecked={dark ? true : false} onChange={() => props.Darkmode()} />
+              <input type="checkbox" name="onoffswitch" className="onoffswitch-checkbox" id="myonoffswitch" checked={dark ? true : false} onChange={() => props.Darkmode()} />
               <label className="onoffswitch-label" htmlFor="myonoffswitch">
                 <div className="onoffswitch-inner"></div>
                 <div className="onoffswitch-switch"></div>
