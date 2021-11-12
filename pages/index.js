@@ -36,7 +36,6 @@ export default function Home(props) {
         <div key={item.id} >{item.info}</div> 
       )
     })
-    console.log(lista)
     return(
       <div className={ "dashboard__item" }>
         <div className={ "dashboard__item-header" }>

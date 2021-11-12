@@ -2,7 +2,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
-import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
+import { getTablebyId, getTablesbyOrder, setTable, deleteTable, getTablesbyWhere, getTables, getRecentTables } from '/public/services/tabelas';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
 
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
@@ -16,7 +16,8 @@ import { async } from '@firebase/util';
 
 export default function Usuarios(props) {
   const user = props.user
-  const [dark, setDark] = useState(props.dark)
+  var dark = props.dark
+
   const [edit, setEdit] = useState(false)
 
   const [formExpand, setFormExpand] = useState(false)
@@ -26,7 +27,7 @@ export default function Usuarios(props) {
   const [title, setTitle] = useState("")
   const [store, setStore] = useState("")
   const [productId, setProductId] = useState("")
-  const [tabela, setTabela] = useState([["", ""], ["", ""]])
+  const [tabela, setTabela] = useState([{linha: ["", ""]}, {linha: ["", ""]}])
 
 
   const [search, setSearch] = useState("")
@@ -45,7 +46,7 @@ export default function Usuarios(props) {
   const [lista, setLista] = useState([])
 
   useEffect(() => {
-    getUsers(user.store).then((response) => {
+    getTables(user.store).then((response) => {
       setTimeout(() => {
         setLista(response)
       }, 500);
@@ -62,13 +63,13 @@ export default function Usuarios(props) {
 
   function Buscar() {
     if (searchCampo && search) {
-      getUsersbyWhere(searchCampo, search, user.store).then((response) => {
+      getTablesbyWhere(searchCampo, search, user.store).then((response) => {
         setTimeout(() => {
 
         }, 500);
       })
       if (searchCampo && search) {
-        getUsersbyWhere(searchCampo, search, user.store).then((response) => {
+        getTablesbyWhere(searchCampo, search, user.store).then((response) => {
           setTimeout(() => {
 
             setLista(response)
@@ -76,7 +77,7 @@ export default function Usuarios(props) {
 
         })
       } else {
-        getUsers().then((response) => {
+        getTables().then((response) => {
           setTimeout(() => {
 
             setLista(response)
@@ -109,13 +110,13 @@ export default function Usuarios(props) {
               <b>
                 ID do Produto:
               </b>
-              {item.email}
+              {item.productId}
             </div>
             <div className={"title"}>
               <b>
                 Titulo:
               </b>
-              {item.name}
+              {item.title}
             </div>
             <div className={"acoes"}>
               <b>
@@ -180,7 +181,7 @@ export default function Usuarios(props) {
 
 
   function Editar(id) {
-    getUserbyId(id).then(response => {
+    getTablebyId(id).then(response => {
       setId(id)
       setTitle(response.title)
       setStore(response.store)
@@ -199,7 +200,6 @@ export default function Usuarios(props) {
     setConfirm(true)
     setPreview(false)
     setX(id)
-    console.log("foi")
     var infos =
     {
       loja: user.store,
@@ -252,7 +252,7 @@ export default function Usuarios(props) {
       setLog(infos)
     }
 
-    setUser(data)
+    setTable(data)
 
     setId("")
     setTitle("")
@@ -274,91 +274,27 @@ export default function Usuarios(props) {
   }
 
   async function addColumn() {
-
+    var newarray = tabela
+    for(var i=0; i < newarray.length; i++){
+      newarray[i].linha.push("")
+    }
+    setTabela(newarray)
     setTabela((prevArray) => [
       ...prevArray,
-      prevArray[tabela.length] = []
+      
     ])
   }
   function addRow() {
-
     setTabela((prevArray) => [
       ...prevArray,
-      prevArray[tabela.length] = []
+      {...prevArray[prevArray.length - 1]}
     ])
   }
 
   function editColumn(e, row, column) {
-
-    console.log('linha: ' + row);
-    console.log('coluna: ' + column);
-    console.log('nome: ' + e.target.name);
     let newArr = [...tabela]; // copying the old datas array
     newArr[row][column] = e.target.value; // replace e.target.value with whatever you want to change it to
     setTabela(newArr);
-  }
-
-  const FormTabela = (props) => {
-
-
-    return (
-      <div className="tabela-de-medidas">
-        {tabela.map((value, i) => {
-          var linhas = tabela.length
-          var colunas = tabela[0].length
-          var row = value
-          var indexRow = i
-          console.log(indexRow, row)
-          return <>
-            <div className="row" key={row}>
-              {row.map((value2, i2) => {
-                var column = value2
-                var indexColumn = i2
-                console.log(indexColumn, column)
-
-                return <>
-                  <input
-                    name={"tabela[" + indexRow + "][" + indexColumn + "]"}
-                    value={tabela[indexRow][indexColumn]}
-                    placeholder={""}
-                    onChange={(e) => editColumn(e, indexRow, indexColumn)} />
-                  {indexColumn == colunas - 1 && colunas < 8 ?
-                    <button className="add column" onClick={(e) => addColumn()} type="button">
-                      {indexRow == 0 ?
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
-                          <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                            <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-                            <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
-                              <circle cx="20" cy="20" r="20" stroke="none" />
-                              <circle cx="20" cy="20" r="19" fill="none" />
-                            </g>
-                          </g>
-                        </svg>
-                        : null}
-                    </button>
-                    : null
-                  }
-                </>
-              })}
-            </div>
-            {indexRow == linhas - 1 ?
-              <button className="add row" onClick={(e) => addRow()} type="button">
-                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
-                  <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                    <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-                    <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
-                      <circle cx="20" cy="20" r="20" stroke="none" />
-                      <circle cx="20" cy="20" r="19" fill="none" />
-                    </g>
-                  </g>
-                </svg>
-              </button>
-              : null
-            }
-          </>
-        })}
-      </div>
-    )
   }
 
   return (
@@ -419,30 +355,28 @@ export default function Usuarios(props) {
               <div className="tabela-de-medidas">
                 {tabela.map((value, i) => {
                   var linhas = tabela.length
-                  var colunas = tabela[0].length
-                  var row = value
+                  var colunas = tabela[0].linha.length
+                  var row = value.linha
                   var indexRow = i
-                  console.log(indexRow, row)
                   return <>
                     <div className="row" key={row}>
                       {row.map((value2, i2) => {
                         var column = value2
                         var indexColumn = i2
-                        console.log(indexColumn, column)
 
                         return <>
                           <input
                             name={"tabela[" + indexRow + "][" + indexColumn + "]"}
                             value={tabela[indexRow][indexColumn]}
                             placeholder={""}
-                            onChange={(e) => editColumn(e, indexRow, indexColumn)} />
+                            onChange ={(e) => editColumn(e, indexRow, indexColumn)} />
                           {indexColumn == colunas - 1 && colunas < 8 ?
                             <button className="add column" onClick={(e) => addColumn()} type="button">
                               {indexRow == 0 ?
-                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41" >
                                   <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                                    <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-                                    <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+                                    <text id="_" data-name="+" transform="translate(14984 -821)" strokeWidth="0" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+                                    <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" strokeWidth="2">
                                       <circle cx="20" cy="20" r="20" stroke="none" />
                                       <circle cx="20" cy="20" r="19" fill="none" />
                                     </g>
@@ -459,8 +393,8 @@ export default function Usuarios(props) {
                       <button className="add row" onClick={(e) => addRow()} type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
                           <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                            <text id="_" data-name="+" transform="translate(14984 -821)" fill="#4cffde" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-                            <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" stroke="#4cffde" strokeWidth="2">
+                            <text id="_" data-name="+" transform="translate(14984 -821)"  strokeWidth="0" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
+                            <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none"  strokeWidth="2">
                               <circle cx="20" cy="20" r="20" stroke="none" />
                               <circle cx="20" cy="20" r="19" fill="none" />
                             </g>
@@ -528,7 +462,7 @@ export default function Usuarios(props) {
                   <button className={"aviso__cancel"} onClick={e => { setMsg(`Registro não foi excluido`); setConfirm(false); setX(false) }}>
                     Cancelar
                   </button>
-                  <button className={"aviso__confirm"} onClick={e => { setMsg(`Registro foi excluido`); deleteUser(x); setX(false); setConfirm(false); Buscar(); }}>
+                  <button className={"aviso__confirm"} onClick={e => { setMsg(`Registro foi excluido`); deleteTable(x); setX(false); setConfirm(false); Buscar(); }}>
                     Confirmar
                   </button>
                 </>

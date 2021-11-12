@@ -83,6 +83,11 @@
                     &.info
                         width: 40%
 
+
+                    &.title
+                        width: 50%
+
+
             .corpo
                 
                 @media (max-width 991px)
@@ -106,7 +111,8 @@
                         height: 44px
                         display: flex
                         align-items: center
-                        margin: 0 10px 0 0 
+                        box-sizing: border-box
+                        padding: 0 10px 0 0 
                         a
                             color: var(--verde)
                             font-size: 13px
@@ -160,6 +166,9 @@
                             width: 15%
                         &.info
                             width: 40%
+
+                        &.title
+                            width: 50%
                     @media (min-width 991px)
                         b
                             display: none

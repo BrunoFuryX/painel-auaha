@@ -60,7 +60,6 @@ export default function Modelos(props) {
     getStores().then((response) => {
       setTimeout(() => {
         setLojas(response)
-        console.log(lojas)
 
       }, 500);
     })
@@ -79,7 +78,6 @@ export default function Modelos(props) {
         setTimeout(() => {
 
           setLista(response)
-          console.log(response)
         }, 500);
 
       })
@@ -223,7 +221,6 @@ export default function Modelos(props) {
   }
   async function Excluir(id){
     var data = await getCasebyId(id)
-    console.log(data)
 
     setMsg(`Registro ${id} será excluido, deseja continuar?`)
     setConfirm(true)
@@ -237,7 +234,6 @@ export default function Modelos(props) {
     }
     setLog(infos)
 
-    console.log("foi")
   }
   const handleChange = (e) => {
     const value = e.target.value;
@@ -299,7 +295,6 @@ export default function Modelos(props) {
   function enviarCapa(e){
     const refImg = ref(storage, (form.store ? form.store : "Auaha" ) +'/images/' + ( form.productId != "" ? form.productId : "teste") + '/capa.png')
     
-    console.log(e.target.files[0])
 
     var uploadTask = uploadBytesResumable(refImg, e.target.files[0])
     uploadTask.on('state_changed', 
@@ -307,23 +302,17 @@ export default function Modelos(props) {
       // Observe state change events such as progress, pause, and resume
       // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
       switch (snapshot.state) {
         case 'paused':
-          console.log('Upload is paused');
           break;
         case 'running':
-          console.log('Upload is running');
           break;
       }
     },(error) => {
-      console.log(error)
     }, function() {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        console.log('File available at', downloadURL);
         var caminho = (form.store ? form.store : "Auaha" ) +'/images/' + ( form.productId != "" ? form.productId : "teste") + '/capa.png'
         var image = downloadURL
-        console.log(caminho, image)
         setForm(prevState => ({
           ...prevState,
           image1: image,
@@ -338,30 +327,23 @@ export default function Modelos(props) {
   function enviarMockup(e){
     const refImg = ref(storage, (form.store ? form.store : "Auaha" ) +'/images/' + ( form.productId != "" ? form.productId : "teste") + '/mockup.png')
     
-    console.log(e.target.files[0])
 
     var uploadTask = uploadBytesResumable(refImg, e.target.files[0])
     uploadTask.on('state_changed', 
     (snapshot) =>{
       //task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
       const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-      console.log('Upload is ' + progress + '% done');
       switch (snapshot.state) {
         case 'paused':
-          console.log('Upload is paused');
           break;
         case 'running':
-          console.log('Upload is running');
           break;
       }
     },(error) => {
-      console.log(error)
     }, function() {
       getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-        console.log('File available at', downloadURL);
         var caminho = (form.store ? form.store : "Auaha" ) +'/images/' + ( form.productId != "" ? form.productId : "teste") + '/mockup.png'
         var image = downloadURL
-        console.log(caminho, image)
         setForm(prevState => ({
           ...prevState,
           image2: image,

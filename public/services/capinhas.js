@@ -18,7 +18,6 @@ const getArquivoById = async (id) => {
     if (querySnapshot.exists()) {
         response = querySnapshot.data();
     } else {
-        console.log("No such document!");
     }
 
     return response
@@ -28,12 +27,9 @@ const getArquivos = async () => {
     const querySnapshot = await getDocs(query(fileRef))
     var response = []
 
-    console.log("casepersonalizada")
     querySnapshot.forEach( async (doc) => {
-        console.log(doc.data())
         const resposta = await getStorebyId(doc.data().loja != "" ? doc.data().loja : "Auaha")
 
-        console.log(doc.data().data  ,new Date(parseInt(doc.data().data)).toLocaleString('pt-BR', options))
 
         if(resposta){
             var loja = resposta.StoreName

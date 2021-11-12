@@ -17,7 +17,6 @@ const getArquivoById = async (id) => {
     if (querySnapshot.exists()) {
         response = querySnapshot.data();
     } else {
-        console.log("No such document!");
     }
 
     return response

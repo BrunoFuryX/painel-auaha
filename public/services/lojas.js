@@ -80,7 +80,6 @@ const getRecentStores = async ( valor) => {
 }
 
 const setStore = async (data) => {
-    console.log(data)
     var identificador
     if(data.id){
         var aa = await setDoc(doc(db, "store" , data.id), data);
@@ -90,7 +89,6 @@ const setStore = async (data) => {
         identificador = docRef
     }
 
-    console.log(identificador)
 
     return { msg: "pronto", id: identificador}
     

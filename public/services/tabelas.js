@@ -4,13 +4,13 @@ import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere
 
 const db = getFirestore(app)
 
-const usersRef = collection(db, "user")
+const tablesRef = collection(db, "table")
 
 
 const storesRef = collection(db, "store")
 
-const getUserbyId = async (id) => {
-    const querySnapshot = await getDoc(doc(usersRef, id));
+const getTablebyId = async (id) => {
+    const querySnapshot = await getDoc(doc(tablesRef, id));
 
     let response
     
@@ -22,12 +22,12 @@ const getUserbyId = async (id) => {
     return response
 }
 
-const getUsers = async (lojaUser) => {
+const getTables = async (lojaUser) => {
     var querySnapshot
     if(lojaUser){
-        querySnapshot = await getDocs(query(usersRef, where("store", "==", lojaUser)))
+        querySnapshot = await getDocs(query(tablesRef, where("store", "==", lojaUser)))
     }else{
-        querySnapshot = await getDocs(usersRef)
+        querySnapshot = await getDocs(tablesRef)
     }
       
 
@@ -42,9 +42,9 @@ const getUsers = async (lojaUser) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                name: doc.data().name,
-                email: doc.data().email,
-                lvl: doc.data().lvl,
+                tabela: doc.data().tabela,
+                title: doc.data().title,
+                productId: doc.data().productId,
                 store: loja
             });
         }else{
@@ -52,9 +52,9 @@ const getUsers = async (lojaUser) => {
 
             response.push({
                 id: doc.id,
-                name: doc.data().name,
-                email: doc.data().email,
-                lvl: doc.data().lvl,
+                tabela: doc.data().tabela,
+                title: doc.data().title,
+                productId: doc.data().productId,
                 store: loja
             });
         }
@@ -64,14 +64,14 @@ const getUsers = async (lojaUser) => {
     return response
 }
 
-const getUsersbyOrder = async (order) => {
+const getTablesbyOrder = async (order) => {
 
 
     var querySnapshot
     if(lojaUser){
-        querySnapshot = await getDocs(query(usersRef, where("store", "==", lojaUser), orderBy(order)))
+        querySnapshot = await getDocs(query(tablesRef, where("store", "==", lojaUser), orderBy(order)))
     }else{
-        querySnapshot = await getDocs(query(usersRef), orderBy(order));
+        querySnapshot = await getDocs(query(tablesRef), orderBy(order));
     }
       
     var response = []
@@ -83,9 +83,8 @@ const getUsersbyOrder = async (order) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                name: doc.data().name,
-                email: doc.data().email,
-                lvl: doc.data().lvl,
+                tabela: doc.data().tabela,
+                productId: doc.data().productId,
                 store: loja
             });
         }else{
@@ -93,9 +92,9 @@ const getUsersbyOrder = async (order) => {
 
             response.push({
                 id: doc.id,
-                name: doc.data().name,
-                email: doc.data().email,
-                lvl: doc.data().lvl,
+                tabela: doc.data().tabela,
+                title: doc.data().title,
+                productId: doc.data().productId,
                 store: loja
             });
         }
@@ -103,8 +102,8 @@ const getUsersbyOrder = async (order) => {
 
     return response
 }
-const getRecentUsers = async ( lojaUser) => {
-    var querySnapshot = await getDocs(query(usersRef, where("store", "==", lojaUser), limit(4)))
+const getRecentTables = async ( lojaUser) => {
+    var querySnapshot = await getDocs(query(tablesRef, where("store", "==", lojaUser), limit(4)))
 
     var response = []
 
@@ -119,12 +118,12 @@ const getRecentUsers = async ( lojaUser) => {
     return response
 }
 
-const getUsersbyWhere = async (campo, valor, lojaUser) => {
+const getTablesbyWhere = async (campo, valor, lojaUser) => {
     var querySnapshot
     if(lojaUser){
-        querySnapshot = await getDocs(query(usersRef, where("store", "==", lojaUser), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')))
+        querySnapshot = await getDocs(query(tablesRef, where("store", "==", lojaUser), where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')))
     }else{
-        querySnapshot = await getDocs(query(usersRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
+        querySnapshot = await getDocs(query(tablesRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
     }
 
     var response = []
@@ -136,9 +135,9 @@ const getUsersbyWhere = async (campo, valor, lojaUser) => {
             var loja = resposta.StoreName
             response.push({
                 id: doc.id,
-                name: doc.data().name,
-                email: doc.data().email,
-                lvl: doc.data().lvl,
+                tabela: doc.data().tabela,
+                title: doc.data().title,
+                productId: doc.data().productId,
                 store: loja
             });
         }else{
@@ -146,9 +145,9 @@ const getUsersbyWhere = async (campo, valor, lojaUser) => {
 
             response.push({
                 id: doc.id,
-                name: doc.data().name,
-                email: doc.data().email,
-                lvl: doc.data().lvl,
+                tabela: doc.data().tabela,
+                title: doc.data().title,
+                productId: doc.data().productId,
                 store: loja
             });
         }
@@ -157,13 +156,13 @@ const getUsersbyWhere = async (campo, valor, lojaUser) => {
     return response
 }
 
-const setUser = async (data) => {
+const setTable = async (data) => {
     var identificador
-    if(data.id){
-        await setDoc(doc(db, "user" , data.id), data);
+    if(data.id && data.id!= ""){
+        await setDoc(doc(db, "table" , data.id), data);
         identificador = data.id
     }else{
-        const docRef = await addDoc(usersRef, data);
+        const docRef = await addDoc(tablesRef, data);
         identificador = docRef
     }
 
@@ -173,10 +172,10 @@ const setUser = async (data) => {
 }
 
 
-const deleteUser = async (id) => {
-    await deleteDoc(doc(db, "user" , id));
+const deleteTable = async (id) => {
+    await deleteDoc(doc(db, "table" , id));
 
     return { msg: "pronto"}
 }
 
-export { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers, getRecentUsers }
+export { getTablebyId, getTablesbyOrder, setTable, deleteTable, getTablesbyWhere, getTables, getRecentTables }

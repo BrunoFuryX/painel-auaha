@@ -17,7 +17,6 @@ const getLogById = async (id) => {
     if (querySnapshot.exists()) {
         response = querySnapshot.data();
     } else {
-        console.log("No such document!");
     }
 
     return response
@@ -52,7 +51,6 @@ const getLogs = async () => {
         }
     });
 
-    console.log(response)
 
     return response
 }
@@ -72,7 +70,6 @@ const getRecentLogs = async (valor) => {
         
     });
 
-    console.log(response)
 
     return response
 }

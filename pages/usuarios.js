@@ -54,7 +54,6 @@ export default function Usuarios(props) {
     getStores().then((response) => {
       setTimeout(() => {
         setLojas(response)
-        console.log(lojas)
 
       }, 500);
     })
@@ -212,7 +211,6 @@ export default function Usuarios(props) {
     setConfirm(true)
     setPreview(false)
     setX(id)
-    console.log("foi")
     var infos =
     {
       loja: user.store,
