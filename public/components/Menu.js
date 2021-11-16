@@ -133,6 +133,11 @@ export default function Menu(props) {
         </>
         : null}
 
+        {store.UploadPhotos == "on" || user.lvl == "Admin" || user.lvl == "Master" ?
+        <>
+          < NavigatorItem nome={"Gestor de Banners"} icon={fotos} link={"/gestorbanners"} width={18} height={18} />
+        </>
+        : null}
     </ul>;
   }
   function toggleMenu() {
