@@ -414,7 +414,7 @@ export default function Modelos(props) {
                       return( <option key={element.id} value={ element.id }> {element.StoreName} </option> )
                     })}
                   </select>
-                  <input name={ "productId" } value={ form.productId }  placeholder={ "Id do Produto" }  onChange={handleChange}/>
+                  <input name={ "productId" } value={ form.productId }  placeholder={ "Id do Produto" } required="true" onChange={handleChange}/>
                   <input name={ "image1" } type="hidden" value={ form.image1 } onChange={handleChange}/>
                   <input name={ "image2" } type="hidden" value={ form.image2 } onChange={handleChange}/>
                   <input name={ "image1caminho" } type="hidden" value={ form.image1caminho } onChange={handleChange}/>

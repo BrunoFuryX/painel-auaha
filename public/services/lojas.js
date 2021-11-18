@@ -1,5 +1,5 @@
 import app from "./firebase"
-import { getFirestore, collection, deleteDoc , getDoc, getDocs, setDoc, addDoc , doc, query, orderBy, limit } from "firebase/firestore"
+import { getFirestore, collection, deleteDoc , getDoc, getDocs, setDoc, addDoc , doc, query, orderBy, limit, where } from "firebase/firestore"
 
 const db = getFirestore(app)
 
@@ -50,7 +50,7 @@ const getStoresbyOrder = async (order) => {
 }
 
 const getStoresbyWhere = async (campo, valor) => {
-    const querySnapshot = await getDocs(query(storesRef, where(campo, valor)));
+    const querySnapshot = await getDocs(query(storesRef, where(campo, '>=', valor), where(campo, '<=', valor +'\uf8ff')));
 
     var response = []
 
