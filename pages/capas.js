@@ -37,14 +37,14 @@ export default function Usuarios(props) {
   },[])
 
   function Buscar(){
-    getArquivos().then((response) => {
+    getArquivos(user.store).then((response) => {
       setTimeout(() => {
         setLista(response)
       }, 500);
     })
 
     if(searchCampo && search){
-        getArquivobyWhere(searchCampo, search).then( (response) => {
+        getArquivobyWhere(searchCampo, search, user.store).then( (response) => {
         setTimeout(() => {
 
           setLista(response)
@@ -52,7 +52,7 @@ export default function Usuarios(props) {
 
       })
     }else{
-        getArquivos().then( (response) => {
+        getArquivos(user.store).then( (response) => {
         setTimeout(() => {
 
         setLista(response)
