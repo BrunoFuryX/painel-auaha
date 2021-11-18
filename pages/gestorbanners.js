@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
-import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/arquivos';
+import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/bannersMercadoShops';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import $ from 'jquery'
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
@@ -27,7 +27,7 @@ export default function Modelos(props) {
     const [formExpand, setFormExpand] = useState(false)
     const [form, setForm] = useState({
         "id": "",
-        "image": [{ caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }],
+        "image": [{ caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }],
         "loja": "",
     })
 
@@ -113,7 +113,7 @@ export default function Modelos(props) {
             <div className="banner" key={"banner" + i}>
                 <input name={`image[${i}].caminho`} type="hidden" value={form.image[i].caminho} onChange={handleChange} />
                 <div className="file">
-                    <input name={"image[${i}]"} type="file" onChange={enviarImagem} accept=".png " />
+                    <input name={`image[${i}]`} type="file" onChange={e => enviarImagem(e, i)} accept=".png " />
                     <label htmlFor="capa" className={form.image[i].url ? "active" : ""}>
                         {form.image[i].url ?
                             <>
@@ -156,7 +156,6 @@ export default function Modelos(props) {
         if (data.id) {
             setMsg(`Registro ${data.id} editado com sucesso`)
             setConfirm(false)
-            setPreview(data.image1)
             var infos =
             {
                 loja: user.store,
@@ -169,7 +168,6 @@ export default function Modelos(props) {
         } else {
             setMsg(`Novo registro criado com sucesso`)
             setConfirm(false)
-            setPreview(data.image1)
             var infos =
             {
                 loja: user.store,
@@ -185,18 +183,17 @@ export default function Modelos(props) {
         setForm({
             "id": "",
             "image": [
-                { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }
+                { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }
             ],
             "loja": "",
         })
         setEdit(false)
 
-        Buscar()
     }
 
 
-    function enviarImagem(e) {
-        const refImg = ref(storage, (form.store ? form.store : "Auaha") + '/images/' + (form.productId != "" ? form.productId : "teste") + '/' + e.target.name + '.png')
+    function enviarImagem(e, i) {
+        const refImg = ref(storage, (form.loja ? form.loja : "Auaha") + '/banners/banner' + i + '.png')
 
 
         var uploadTask = uploadBytesResumable(refImg, e.target.files[0])
@@ -205,6 +202,7 @@ export default function Modelos(props) {
                 // Observe state change events such as progress, pause, and resume
                 // Get task progress, including the number of bytes uploaded and the total number of bytes to be uploaded
                 const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
+                console.log(progress)
                 switch (snapshot.state) {
                     case 'paused':
                         break;
@@ -216,11 +214,11 @@ export default function Modelos(props) {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
                     var caminho = (form.store ? form.store : "Auaha") + '/images/' + (form.productId != "" ? form.productId : "teste") + '/' + e.target.name + '.png'
                     var image = downloadURL
+                    var images = form.image
+                    images[i] = {url: image, caminho: caminho}
                     setForm(prevState => ({
                         ...prevState,
-                        image1: image,
-                        image1caminho: caminho,
-
+                        image: images
                     }));
 
                 });
@@ -282,7 +280,7 @@ export default function Modelos(props) {
                             </div>
                         </h3>
                         <form onSubmit={e => enviarForm(e)}>
-                            <input type="hidden" name={"id"} value={form.id} />
+                            <input type="hidden" name={"id"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} />
                             <select name={"loja"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} onChange={handleChange}>
                                 <option value={""} disabled={true}>Selecione a Loja</option>
                                 {lojas.map(element => {
@@ -291,7 +289,6 @@ export default function Modelos(props) {
                                 })}
                             </select>
                             {rows.map((i) => {
-                                console.log(i)
                                 return   <BannerItem i={i} key={ 'banner'+i }/>
                             })}
                             <button type="submit">{button}</button>
@@ -324,7 +321,7 @@ export default function Modelos(props) {
                                     <button className={"aviso__cancel"} onClick={e => { setMsg(`Registro não foi excluido`); setConfirm(false); setX(false) }}>
                                         Cancelar
                                     </button>
-                                    <button className={"aviso__confirm"} onClick={e => { setMsg(`Registro excluido`); deleteArquivo(x); setX(false); setConfirm(false); Buscar(); }}>
+                                    <button className={"aviso__confirm"} onClick={e => { setMsg(`Registro excluido`); deleteArquivo(x); setX(false); setConfirm(false); }}>
                                         Confirmar
                                     </button>
                                 </>

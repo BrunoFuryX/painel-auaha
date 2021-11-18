@@ -124,6 +124,8 @@ const getArquivobyWhere = async (campo, valor, lojaUser) => {
 
 const setArquivo = async (data) => {
     var identificador
+
+    console.log(data)
     if(data.id){
         await setDoc(doc(db, "bannersMercadoShops" , data.id), data);
         identificador = data.id
