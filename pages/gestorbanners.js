@@ -109,7 +109,7 @@ export default function Modelos(props) {
     const BannerItem = (props) => {
         var i = props.i
         return (
-            <div className="banner">
+            <div className="banner" key={ "banner"+ i}>
                 <input name={`image[${i}].caminho`} type="hidden" value={form.image[i].caminho} onChange={handleChange} />
                 <div className="file">
                     <input name={"image[${i}]"} type="file" onChange={enviarImagem} accept=".png " />
@@ -135,11 +135,11 @@ export default function Modelos(props) {
                                     </g>
                                 </svg>
 
-                                Escolher arquivo para o banner
+                                Escolher arquivo para o banner {i}
                             </>
                         }
 
-                    </label>
+                    </label> 
                 </div>
                 <input name={`image[${i}].url`} type="text" placeholder="Link do banner" readOnly="true" value={form.image[i].url} onChange={handleChange} />
 
