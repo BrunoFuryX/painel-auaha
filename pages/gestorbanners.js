@@ -21,7 +21,7 @@ import { async } from '@firebase/util';
 
 export default function Modelos(props) {
   const user = props.user
-  const [dark, setDark] = useState(props.dark)
+  var dark = props.dark
   const [edit, setEdit] = useState(false)
 
   const [formExpand, setFormExpand] = useState(false)
