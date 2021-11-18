@@ -10,18 +10,10 @@ import { getRecentLogs } from '/public/services/logs';
 
 
 import sair from "/public/images/sair.svg"
-export async function getStaticProps() {
-    const propsStatic = props.user
-    return {
-        props: {
-            propsStatic
-        }
-    }
-}
+ 
 
-
-export default function Home(props, {propsStatic}) {
-  const user = propsStatic
+export default function Home(props) {
+  const user = props.user
   var dark = props.dark
 
   const [usersList, setUsersList] = useState([])

@@ -16,7 +16,7 @@ import { async } from '@firebase/util';
 
 export default function Usuarios(props) {
   const user = props.user
-  const [dark, setDark] = useState(props.dark)
+  var dark = props.dark
   const [edit, setEdit] = useState(false)
 
   const [formExpand, setFormExpand] = useState(false)
@@ -333,11 +333,17 @@ export default function Usuarios(props) {
             <form onSubmit={e => enviarForm(e)}>
               <input type="hidden" name={"id"} value={id} />
               <input name={"name"} value={name} placeholder={"Nome"} onChange={(e) => setName(e.target.value)} />
-              <input name={"email"} value={email} placeholder={"E-mail"} onChange={(e) => setEmail(e.target.value)} />
-              <input type="password" name={"password"} placeholder={"Senha"} value={password} onChange={(e) => setPassword(e.target.value)} />
+              <input name={"email"} value={email} placeholder={"E-mail"} onChange={(e) => setEmail(e.target.value)} required="true"/>
+              <input type="password" name={"password"} placeholder={"Senha"} value={password} onChange={(e) => setPassword(e.target.value)} required="true"/>
               <select name={"lvl"} value={lvl} onChange={(e) => setLvl(e.target.value)} >
                 <option value={"Usuario"}>Usuario</option>
                 <option value={"Gerente"}>Gerente</option>
+                {user.lvl == "Admin"
+                  ?
+                  <>
+                    <option value={"Admin"}>Admin</option>
+                  </>
+                  : null}
                 {user.lvl == "Master"
                   ?
                   <>
