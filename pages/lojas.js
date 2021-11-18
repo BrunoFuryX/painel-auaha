@@ -423,28 +423,28 @@ export default function Lojas(props) {
                       <input type="checkbox" name={ "UploadPhotos" }  placeholder={ "UploadPhotos" }  value={ form.UploadPhotos } checked={ form.UploadPhotos? true : false} onChange={handleChangeCheckbox}/>
                       <label htmlFor={ "UploadPhotos" } className="check"></label>
                       <label htmlFor={ "UploadPhotos" } className="text">
-                        Ferramenta de Upload de Imagens
+                        Upload de Imagens
                       </label>
                     </div>
                     <div className={ "checkbox" }>
                       <input type="checkbox" name={ "UploadFiles" }  placeholder={ "UploadFiles" }  value={ form.UploadFiles } checked={ form.UploadFiles? true : false} onChange={handleChangeCheckbox}/>
                       <label htmlFor={ "UploadFiles" } className="check"></label>
                       <label htmlFor={ "UploadFiles" } className="text">
-                      Ferramenta de Upload de Arquivos
+                      Upload de Arquivos
                       </label>
                     </div>
                     <div className={ "checkbox" }>
                       <input type="checkbox" name={ "CustomCase" }  placeholder={ "CustomCase" }  value={ form.CustomCase } checked={ form.CustomCase? true : false} onChange={handleChangeCheckbox}/>
                       <label htmlFor={ "CustomCase" } className="check"></label>
                       <label htmlFor={ "CustomCase" } className="text">
-                      Ferramenta de Customização de Capinhas
+                      Customização de Capinhas
                       </label>
                     </div>
                     <div className={ "checkbox" }>
                       <input type="checkbox" name={ "MeasurementChart" }  placeholder={ "MeasurementChart" } checked={ form.MeasurementChart? true : false} onChange={handleChangeCheckbox}/>
                       <label htmlFor={ "MeasurementChart" } className="check"></label>
                       <label htmlFor={ "MeasurementChart" } className="text">
-                      Ferramenta da Tabela de Medidas
+                      Tabela de Medidas
                       </label>
                     </div>
                     {form.StorePlataform == "MercadoShops"?
