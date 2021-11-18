@@ -34,6 +34,7 @@ export default function Lojas(props) {
     "UploadFiles": "",
     "MeasurementChart": "",
     "CustomCase": "",
+    "BannersMercado": "",
   })
   const [ search, setSearch] = useState("")
   const [ searchCampo, setSearchCampo] = useState(false)
@@ -230,6 +231,8 @@ export default function Lojas(props) {
       "UploadFiles": "",
       "MeasurementChart": "",
       "CustomCase": "",
+      "BannersMercado": "",
+
     })
 
     $("html, body").animate({ scrollTop: 0 }, "slow");
@@ -314,6 +317,8 @@ export default function Lojas(props) {
       "UploadFiles": "",
       "MeasurementChart": "",
       "CustomCase": "",
+      "BannersMercado": "",
+
     })
 
     Buscar()
@@ -406,6 +411,8 @@ export default function Lojas(props) {
                     <option value={ "Jet" }>Jet</option>
                     <option value={ "Fbits" }>Fbits</option>
                     <option value={ "Nuvemshop" }>Nuvemshop</option>
+                    <option value={ "MercadoShops" }>MercadoShops</option>
+
                   </select>
                   <input name={ "accessKey" }  placeholder={ "accessKey" }  value={ form.accessKey } onChange={handleChange}/>
                   <input name={ "apiKey" }  placeholder={ "apiKey" }  value={ form.apiKey } onChange={handleChange}/>
@@ -440,6 +447,10 @@ export default function Lojas(props) {
                       Ferramenta da Tabela de Medidas
                       </label>
                     </div>
+                    {form.StorePlataform == "MercadoShops"?
+                        <input type="text" name={ "BannersMercado" }  placeholder={ "BannersMercado" } value={ form.BannersMercado} onChange={handleChange}/>
+                    : null}
+                    
                   </div>
 
                   <button type="submit">{ button }</button>
