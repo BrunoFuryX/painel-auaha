@@ -27,7 +27,7 @@ export default function Modelos(props) {
     const [formExpand, setFormExpand] = useState(false)
     const [form, setForm] = useState({
         "id": "",
-        "image": [{ caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }],
+        "image": [{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },],
         "loja": "",
     })
 
@@ -76,12 +76,8 @@ export default function Modelos(props) {
 
         setForm({
             "id": "",
-            "image1": "",
-            "image1caminho": "",
-            "image2": "",
-            "image2caminho": "",
-            "loja": "",
-            "productId": "",
+        "image": [{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },],
+        "loja": "",
         })
         $("html, body").animate({ scrollTop: 0 }, "slow");
 
@@ -110,7 +106,10 @@ export default function Modelos(props) {
     const BannerItem = (props) => {
         var i = props.i
         return (
-            <div className="banner" key={"banner" + i}>
+            <div className="banner__item" key={"banner" + i}>
+                
+                <h3>Minibanner {i + 1}</h3>
+
                 <input name={`image[${i}].caminho`} type="hidden" value={form.image[i].caminho} onChange={handleChange} />
                 <div className="file">
                     <input name={`image[${i}]`} type="file" onChange={e => enviarImagem(e, i)} accept=".png " />
@@ -136,7 +135,7 @@ export default function Modelos(props) {
                                     </g>
                                 </svg>
 
-                                Escolher arquivo para o banner {i}
+                                Selecionar Imagem
                             </>
                         }
 
@@ -183,7 +182,7 @@ export default function Modelos(props) {
         setForm({
             "id": "",
             "image": [
-                { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }, { caminho: "", url: "" }
+                { caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },
             ],
             "loja": "",
         })
@@ -212,7 +211,7 @@ export default function Modelos(props) {
             }, (error) => {
             }, function () {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    var caminho = (form.store ? form.store : "Auaha") + '/images/' + (form.productId != "" ? form.productId : "teste") + '/' + e.target.name + '.png'
+                    var caminho = (form.store ? form.store : "Auaha") + '/images/' + (form.productId != "" ? form.productId : "teste") + '/banner' +i  + '.png'
                     var image = downloadURL
                     var images = form.image
                     images[i] = {url: image, caminho: caminho}
@@ -265,20 +264,8 @@ export default function Modelos(props) {
                 </div>
             </header>
             <div className={"painel"}>
-                <div className={"cadastro"}>
-                    <div className={"cadastro__container banners " + (edit ? "editar" : "") + (formExpand ? " explode " : " implode ")}>
-                        <h3 onClick={() => ExpadirForm()}>
-                            Editar Imagens
-                            <div className="seta mobile">
-                                {
-                                    formExpand
-                                        ?
-                                        <FaAngleUp />
-                                        :
-                                        <FaAngleDown />
-                                }
-                            </div>
-                        </h3>
+                <div className={"banner__cadastro"}>
+                    <div className={"banners " + (edit ? "editar" : "") + (formExpand ? " explode " : " implode ")}>
                         <form onSubmit={e => enviarForm(e)}>
                             <input type="hidden" name={"id"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} />
                             <select name={"loja"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} onChange={handleChange}>
@@ -288,9 +275,11 @@ export default function Modelos(props) {
                                     return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
                                 })}
                             </select>
+                            <div className="banners__list">
                             {rows.map((i) => {
                                 return   <BannerItem i={i} key={ 'banner'+i }/>
                             })}
+                            </div>
                             <button type="submit">{button}</button>
                         </form>
                     </div>
