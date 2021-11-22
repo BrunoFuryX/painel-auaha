@@ -8,6 +8,9 @@ const db = getFirestore(app)
 const fileRef = collection(db, "bannersMercadoShops")
 
 const getArquivoById = async (id) => {
+
+    console.log(id)
+
     const querySnapshot = await getDoc(doc(fileRef, id));
 
     let response
@@ -16,6 +19,8 @@ const getArquivoById = async (id) => {
         response = querySnapshot.data();
     } else {
     }
+
+    console.log(response)
 
     return response
 }
@@ -125,10 +130,9 @@ const getArquivobyWhere = async (campo, valor, lojaUser) => {
 const setArquivo = async (data) => {
     var identificador
 
-    console.log(data)
-    if(data.id){
-        await setDoc(doc(db, "bannersMercadoShops" , data.id), data);
-        identificador = data.id
+    if(data.loja){
+        await setDoc(doc(db, "bannersMercadoShops" , data.loja), data);
+        identificador = data.loja
     }else{
         const docRef = await addDoc(fileRef, data);
         identificador = docRef

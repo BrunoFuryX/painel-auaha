@@ -302,6 +302,30 @@
                         height: 100%
                         background var(--bgInner)
                         border-radius: 5px
+                        position: relative
+                        cursor: pointer
+                        &:hover
+                            .trocar
+                                opacity 1
+                        img
+                            border-radius: 5px
+
+                        .trocar
+                            display: flex
+                            gap: 10px
+                            color: var(--verde)
+                            font-size: 14px
+                            flex-direction: column
+                            align-items: center
+                            justify-content: center
+                            position absolute
+                            top: 0
+                            left: 0
+                            width: 100%
+                            height: 100%
+                            border-radius: 5px
+                            background: #000b
+                            opacity 0
 
                     svg
                         width: 37px

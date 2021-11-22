@@ -13,6 +13,7 @@ import lojas from "/public/images/lojas.svg"
 import modelosDeCapas from "/public/images/modelosDeCapas.svg"
 import tabelaDeMedidas from "/public/images/tabelaDeMedidas.svg"
 import usuarios from "/public/images/usuarios.svg"
+import gestorbanners from "/public/images/gestorbanners.svg"
 
 import mais from "/public/images/expandir.svg"
 import menos from "/public/images/minimizar.svg"
@@ -133,9 +134,9 @@ export default function Menu(props) {
         </>
         : null}
 
-        {store.UploadPhotos  || user.lvl == "Admin" || user.lvl == "Master" ?
+        {store.BannersMercado > 0  || user.lvl == "Admin" || user.lvl == "Master" ?
         <>
-          < NavigatorItem nome={"Gestor de Banners"} icon={fotos} link={"/gestorbanners"} width={18} height={18} />
+          < NavigatorItem nome={"Gestor de Banners"} icon={gestorbanners} link={"/gestorbanners"} width={18} height={18} />
         </>
         : null}
     </ul>;

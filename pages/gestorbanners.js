@@ -68,30 +68,21 @@ export default function Modelos(props) {
                     setRows(prev => [...prev, i])
                 }
             })
+            getArquivoById(loja).then(response => {
+                let resposta = response
+                console.log(loja)
+                console.log(resposta)
+                if(response){
+                    setForm({
+                        ...resposta,
+                    })
+                    setButton("Salvar")
+                    setEdit(true)
+                }
+            })
         }
     }, [form.loja])
 
-    function Editar(id) {
-        setFormExpand(true)
-
-        setForm({
-            "id": "",
-        "image": [{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },],
-        "loja": "",
-        })
-        $("html, body").animate({ scrollTop: 0 }, "slow");
-
-        getArquivoById(id).then(response => {
-            let resposta = response
-            setForm({
-                ...resposta,
-                id: id
-            })
-            setButton("Salvar")
-            setEdit(true)
-
-        })
-    }
     const handleChange = (e) => {
         const value = e.target.value;
         const name = e.target.name;
@@ -112,10 +103,12 @@ export default function Modelos(props) {
 
                 <input name={`image[${i}].caminho`} type="hidden" value={form.image[i].caminho} onChange={handleChange} />
                 <div className="file">
-                    <input name={`image[${i}]`} type="file" onChange={e => enviarImagem(e, i)} accept=".png " />
-                    <label htmlFor="capa" className={form.image[i].url ? "active" : ""}>
+                    <input id={`image[${i}]`} name={`image[${i}]`} type="file" onChange={e => enviarImagem(e, i)} accept=".png " />
+                    <label htmlFor={`image[${i}]`} className={form.image[i].url ? "active" : ""}>
                         {form.image[i].url ?
                             <>
+                            <Image src={ form.image[i].url } width={ 270 } height={ 270 }/>
+                            <div className='trocar'>
                                 <svg xmlns="http://www.w3.org/2000/svg" width="20.121" height="17.303" viewBox="0 0 20.121 17.303">
                                     <g id="_8Ot0Al.tif" data-name="8Ot0Al.tif" transform="translate(-1232.329 -1260.092)">
                                         <g id="Grupo_7" data-name="Grupo 7" transform="translate(1232.329 1260.092)">
@@ -125,6 +118,7 @@ export default function Modelos(props) {
                                     </g>
                                 </svg>
                                 Trocar Imagem
+                            </div>
                             </>
                             :
                             <>
@@ -151,6 +145,8 @@ export default function Modelos(props) {
         e.preventDefault();
 
         const data = form
+
+        console.log(form)
 
         if (data.id) {
             setMsg(`Registro ${data.id} editado com sucesso`)
@@ -211,7 +207,7 @@ export default function Modelos(props) {
             }, (error) => {
             }, function () {
                 getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-                    var caminho = (form.store ? form.store : "Auaha") + '/images/' + (form.productId != "" ? form.productId : "teste") + '/banner' +i  + '.png'
+                    var caminho = (form.loja ? form.loja : "Auaha") + '/banners/banner' + i + '.png'
                     var image = downloadURL
                     var images = form.image
                     images[i] = {url: image, caminho: caminho}
@@ -267,7 +263,7 @@ export default function Modelos(props) {
                 <div className={"banner__cadastro"}>
                     <div className={"banners " + (edit ? "editar" : "") + (formExpand ? " explode " : " implode ")}>
                         <form onSubmit={e => enviarForm(e)}>
-                            <input type="hidden" name={"id"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} />
+                            <input type="hidden" name={"id"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} onChange={handleChange}/>
                             <select name={"loja"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} onChange={handleChange}>
                                 <option value={""} disabled={true}>Selecione a Loja</option>
                                 {lojas.map(element => {
