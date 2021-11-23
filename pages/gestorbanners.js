@@ -55,6 +55,16 @@ export default function Modelos(props) {
 
             }, 500);
         })
+        if(user.store != ""){
+            const value = user.store;
+            const name = "loja";
+    
+            setForm(prevState => ({
+                ...prevState,
+                [name]: value
+            }));
+        }
+        
     }, [])
 
     useEffect(() => {
@@ -81,7 +91,44 @@ export default function Modelos(props) {
                 }
             })
         }
-    }, [form.loja])
+    }, [form.loja, user.store])
+
+
+    function fallbackCopyTextToClipboard(text) {
+        var textArea = document.createElement("textarea");
+        textArea.value = text;
+        
+        // Avoid scrolling to bottom
+        textArea.style.top = "0";
+        textArea.style.left = "0";
+        textArea.style.position = "fixed";
+      
+        document.body.appendChild(textArea);
+        textArea.focus();
+        textArea.select();
+      
+        try {
+          var successful = document.execCommand('copy');
+          var msg = successful ? 'successful' : 'unsuccessful';
+          console.log('Fallback: Copying text command was ' + msg);
+        } catch (err) {
+          console.error('Fallback: Oops, unable to copy', err);
+        }
+      
+        document.body.removeChild(textArea);
+    }
+    function copyTextToClipboard(e, text) {
+        e.preventDefault();
+        if (!navigator.clipboard) {
+            fallbackCopyTextToClipboard(text);
+            return;
+        }
+        navigator.clipboard.writeText(text).then(function() {
+            console.log('Async: Copying to clipboard was successful!');
+        }, function(err) {
+            console.error('Async: Could not copy text: ', err);
+        });
+    }
 
     const handleChange = (e) => {
         const value = e.target.value;
@@ -103,7 +150,7 @@ export default function Modelos(props) {
 
                 <input name={`image[${i}].caminho`} type="hidden" value={form.image[i].caminho} onChange={handleChange} />
                 <div className="file">
-                    <input id={`image[${i}]`} name={`image[${i}]`} type="file" onChange={e => enviarImagem(e, i)} accept=".png " />
+                    <input id={`image[${i}]`} name={`image[${i}]`} type="file" onChange={async (e) => {await enviarImagem(e, i);}} accept=".png " />
                     <label htmlFor={`image[${i}]`} className={form.image[i].url ? "active" : ""}>
                         {form.image[i].url ?
                             <>
@@ -135,14 +182,32 @@ export default function Modelos(props) {
 
                     </label>
                 </div>
-                <input name={`image[${i}].url`} type="text" placeholder="Link do banner" readOnly={true} value={form.image[i].url} onChange={handleChange} />
+                <div className="paste">
+                    <input name={`image[${i}].url`} type="text" placeholder="Link do banner" readOnly={true} value={form.image[i].url} onChange={handleChange} />
+                    <button onClick={ (e) => copyTextToClipboard(e, form.image[i].url )}>
+                        <svg xmlns="http://www.w3.org/2000/svg"  width="21.173" height="24.937" viewBox="0 0 21.173 24.937">
+                            <defs>
+                                <clipPath id="clip-path">
+                                <rect id="Retângulo_852" data-name="Retângulo 852" width="21.173" height="24.937" transform="translate(0 0)"/>
+                                </clipPath>
+                            </defs>
+                            <g id="Grupo_572" data-name="Grupo 572" transform="translate(0 0)">
+                                <g id="Grupo_571" data-name="Grupo 571" clipPath="url(#clip-path)">
+                                    <path id="Caminho_67" data-name="Caminho 67" d="M8.543,19.75c-1.081,0-2.163,0-3.244,0a.765.765,0,0,1-.763-.417.744.744,0,0,1,.609-1.074c.039,0,.077,0,.116,0q3.279,0,6.558,0a.747.747,0,0,1,.711,1.115.779.779,0,0,1-.743.378c-1.08-.005-2.163,0-3.244,0" fill="#4cffde"/>
+                                    <path id="Caminho_68" data-name="Caminho 68" d="M8.542,16.041c-1.081,0-2.163,0-3.244,0a.75.75,0,1,1-.034-1.493c.8-.005,1.607,0,2.41,0q2.063,0,4.124,0a.753.753,0,0,1,.827.768.706.706,0,0,1-.654.711c-.455.023-.911.014-1.367.016H8.542" fill="#4cffde"/>
+                                    <path id="Caminho_69" data-name="Caminho 69" d="M21.166,6.146a.616.616,0,0,0-.145-.364Q18.582,2.971,16.131.17A1.365,1.365,0,0,1,16.022,0H6.7A6.63,6.63,0,0,0,5.632.419a3,3,0,0,0-1.538,2.49V4.145H2.6a6.671,6.671,0,0,0-1.064.42A3,3,0,0,0,0,7.054V8.6H0v.3c0,3.565.006,7.131,0,10.7v2.334a3.169,3.169,0,0,0,2.664,3,1.4,1.4,0,0,0,.171.01H14.1a3.072,3.072,0,0,0,2.975-2.977c0-.389,0-.779,0-1.168H18.2a3.072,3.072,0,0,0,2.975-2.977q0-5.835,0-11.669M15.975,1.517l3.7,4.424H18.642c-.31,0-.62-.019-.928.005a1.192,1.192,0,0,1-1.1-.558,3.1,3.1,0,0,1-.637-1.92c.008-.626,0-1.252,0-1.951m-.38,10.34v9.907A1.574,1.574,0,0,1,13.9,23.453H3.185a1.574,1.574,0,0,1-1.7-1.688V7.312A1.574,1.574,0,0,1,3.168,5.63H10.4V5.9c0,.912,0,1.825,0,2.737a3.048,3.048,0,0,0,2.922,2.932c.749.005,1.5,0,2.274,0Zm-3.712-6.2c1.252,1.5,2.46,2.938,3.7,4.424H14.549c-.309,0-.62-.019-.928,0a1.19,1.19,0,0,1-1.1-.558,3.093,3.093,0,0,1-.638-1.919c.008-.627,0-1.253,0-1.952m7.8,2.05v9.906a1.575,1.575,0,0,1-1.695,1.69h-.916q0-4.508,0-9.016a.611.611,0,0,0-.145-.364q-2.439-2.812-4.89-5.613a1.3,1.3,0,0,1-.109-.17H5.582V3.166A1.572,1.572,0,0,1,7.261,1.485h7.23v.27c0,.913,0,1.825,0,2.738a3.049,3.049,0,0,0,2.922,2.932c.749,0,1.5,0,2.274,0Z" fill="#4cffde"/>
+                                </g>
+                            </g>
+                        </svg>
+
+                    </button>
+                </div>
 
             </div>
         )
     }
 
     function enviarForm(e) {
-        e.preventDefault();
 
         const data = form
 
@@ -156,7 +221,7 @@ export default function Modelos(props) {
                 loja: user.store,
                 usuario: user.name,
                 data: Date.now().toString(),
-                info: `${user.name} editou modelo ${data.id}`
+                info: `${user.name} alterou os banners para a loja ${form.loja}`
             }
             setLog(infos)
 
@@ -168,21 +233,12 @@ export default function Modelos(props) {
                 loja: user.store,
                 usuario: user.name,
                 data: Date.now().toString(),
-                info: `${user.name} criou um modelo para a loja ${form.loja}`
+                info: `${user.name} alterou os banners para a loja ${form.loja}`
             }
             setLog(infos)
 
         }
         setArquivo(data)
-
-        setForm({
-            "id": "",
-            "image": [
-                { caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },{ caminho: "", url: "",title: "" },
-            ],
-            "loja": "",
-        })
-        setEdit(false)
 
     }
 
@@ -215,6 +271,9 @@ export default function Modelos(props) {
                         ...prevState,
                         image: images
                     }));
+
+                    var e = document.querySelector('form')
+                    enviarForm(e)
 
                 });
             });
@@ -264,10 +323,9 @@ export default function Modelos(props) {
                     <div className={"banners " + (edit ? "editar" : "") + (formExpand ? " explode " : " implode ")}>
                         <form onSubmit={e => enviarForm(e)}>
                             <input type="hidden" name={"id"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} onChange={handleChange}/>
-                            <select name={"loja"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} onChange={handleChange}>
+                            <select name={"loja"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} type={user.store ? "hidden" : "text"} onChange={handleChange}>
                                 <option value={""} disabled={true}>Selecione a Loja</option>
                                 {lojas.map(element => {
-
                                     return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
                                 })}
                             </select>
@@ -276,7 +334,6 @@ export default function Modelos(props) {
                                 return   <BannerItem i={i} key={ 'banner'+i }/>
                             })}
                             </div>
-                            <button type="submit">{button}</button>
                         </form>
                     </div>
                 </div>
