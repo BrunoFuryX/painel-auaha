@@ -277,6 +277,18 @@
                     color: var(--texto)
                     font-size: 16px
                     font-weight: 400
+                .name
+                    display: flex
+                    justify-content: space-between
+                    align-items: center
+                    button
+                        width: 40px
+                        color: var(--vermelho)
+                        background: transparent
+                        padding: 0
+                        &:hover
+                            box-shadow: none
+
                 .paste
                     display: flex
                     justify-content: center
@@ -329,6 +341,10 @@
                                 opacity 1
                         img
                             border-radius: 5px
+                            min-width: 0!important
+                            min-height: 0!important
+                            width: auto !important
+                            height: auto !important
 
                         .trocar
                             display: flex

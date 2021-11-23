@@ -4,10 +4,10 @@ import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
 import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
-import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/bannersMercadoShops';
+import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/banners';
 import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import $ from 'jquery'
-import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import { FaAngleDown, FaAngleUp, FaRegTimesCircle } from "react-icons/fa";
 
 import { setLog } from '/public/services/logs';
 
@@ -139,15 +139,29 @@ export default function Modelos(props) {
             [name]: value
         }));
     };
+    function RemoveBanner(index){
+        var aux = form
 
+        aux.image[index] = {
+            caminho: "",
+            url: "",
+            title: ""
+        }
 
+        setForm(aux);
+
+        enviarForm()
+    }
     const BannerItem = (props) => {
         var i = props.i
         return (
             <div className="banner__item" key={"banner" + i}>
-                
-                <h3>Minibanner {i + 1}</h3>
-
+                <div className="name">
+                    <h3>Banner {i + 1}</h3>
+                    <button onClick={() => RemoveBanner(props.i) }>
+                        {form.image[i].url ? <FaRegTimesCircle /> : null }
+                    </button>
+                </div>
                 <input name={`image[${i}].caminho`} type="hidden" value={form.image[i].caminho} onChange={handleChange} />
                 <div className="file">
                     <input id={`image[${i}]`} name={`image[${i}]`} type="file" onChange={async (e) => {await enviarImagem(e, i);}} accept=".png " />
@@ -226,7 +240,7 @@ export default function Modelos(props) {
             setLog(infos)
 
         } else {
-            setMsg(`Novo registro criado com sucesso`)
+            setMsg(`Editado com sucesso`)
             setConfirm(false)
             var infos =
             {
