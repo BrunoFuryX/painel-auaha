@@ -412,7 +412,6 @@ export default function Lojas(props) {
                     <option value={ "Fbits" }>Fbits</option>
                     <option value={ "Nuvemshop" }>Nuvemshop</option>
                     <option value={ "MercadoShops" }>MercadoShops</option>
-
                   </select>
                   <input name={ "accessKey" }  placeholder={ "accessKey" }  value={ form.accessKey } onChange={handleChange}/>
                   <input name={ "apiKey" }  placeholder={ "apiKey" }  value={ form.apiKey } onChange={handleChange}/>
@@ -447,13 +446,23 @@ export default function Lojas(props) {
                       Tabela de Medidas
                       </label>
                     </div>
-                    {form.StorePlataform == "MercadoShops"?
+                    {form.StorePlataform == "MercadoShops" || form.StorePlataform == "Jet" ?
                         <input type="text" name={ "BannersMercado" }  placeholder={ "BannersMercado" } value={ form.BannersMercado} onChange={handleChange}/>
                     : null}
                     
                   </div>
 
-                  <button type="submit">{ button }</button>
+                  <div className="actions">
+                    <button type="submit">{button}</button>
+                    <button className="cancelar" onClick={ (e) => resetForm(e)}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="19.092" height="19.092" viewBox="0 0 19.092 19.092">
+                        <g id="Grupo_459" data-name="Grupo 459" transform="translate(-16105.954 -28.454)">
+                          <rect id="Retângulo_836" data-name="Retângulo 836" width="25" height="2" rx="1" transform="translate(16107.368 28.454) rotate(45)" fill="#ff4c34"/>
+                          <rect id="Retângulo_838" data-name="Retângulo 838" width="25" height="2" rx="1" transform="translate(16105.954 46.132) rotate(-45)" fill="#ff4c34"/>
+                        </g>
+                      </svg>
+                    </button>
+                  </div>
               </form>
           </div>
         </div>

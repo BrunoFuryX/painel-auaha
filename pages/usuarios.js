@@ -277,6 +277,19 @@ export default function Usuarios(props) {
 
     Buscar()
   }
+  function resetForm(e){
+    e.preventDefault()
+    setId("")
+    setName("")
+    setEmail("")
+    setPassword("")
+    setLvl("Usuario")
+    setStore("")
+    setButton("Adicionar")
+    setEdit(false)
+
+    Buscar()
+  }
 
   function ExpadirForm() {
     if (formExpand) {
@@ -359,7 +372,17 @@ export default function Usuarios(props) {
                   return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
                 })}
               </select>
-              <button type="submit">{button}</button>
+              <div className="actions">
+                <button type="submit">{button}</button>
+                <button className="cancelar" onClick={ (e) => resetForm(e)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19.092" height="19.092" viewBox="0 0 19.092 19.092">
+                    <g id="Grupo_459" data-name="Grupo 459" transform="translate(-16105.954 -28.454)">
+                      <rect id="Retângulo_836" data-name="Retângulo 836" width="25" height="2" rx="1" transform="translate(16107.368 28.454) rotate(45)" fill="#ff4c34"/>
+                      <rect id="Retângulo_838" data-name="Retângulo 838" width="25" height="2" rx="1" transform="translate(16105.954 46.132) rotate(-45)" fill="#ff4c34"/>
+                    </g>
+                  </svg>
+                </button>
+              </div>
             </form>
           </div>
         </div>

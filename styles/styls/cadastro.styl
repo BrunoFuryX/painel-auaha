@@ -73,7 +73,7 @@
         &.lojas
             form
                 display: grid
-                grid-template-columns: repeat(5, 1fr) 160px;
+                grid-template-columns: repeat(5, 1fr) 200px;
                 grid-template-rows: repeat(3, 1fr);
                 grid-column-gap: 20px;
                 grid-row-gap: 20px;
@@ -200,6 +200,8 @@
                 padding:  15px
                 font-size: 14px
                 letter-spacing: .2px
+                &:focus
+                    box-shadow: 0 0 5px var(--verde)
                 
             select
                 appearance: none
@@ -240,21 +242,31 @@
                         color: var(--verde)
                         svg
                             fill: var(--verde)
-            button
-                width: 100%
-                max-width: 160px
-                color: var(--textoInvertido)
-                background: var(--verde)
-                height: 44px
-                border-radius: 5px
-                border 0
-                font-size: 14px
-                padding:  15px
-                text-transform: uppercase
-                &:hover
-                    box-shadow: 0 0 10px var(--verde)
-                    color: var(--verde)
-                    background: var(--textoInvertido)
+            .actions
+                display: flex
+                gap: 15px
+                justify-content: center
+                align-items: center
+                width 200px
+                .cancelar
+                    height: 48px
+                    width: 48px
+                    background: transparent
+                [type=submit]
+                    width: 100%
+                    max-width: 150px
+                    color: var(--textoInvertido)
+                    background: var(--verde)
+                    height: 44px
+                    border-radius: 5px
+                    border 0
+                    font-size: 14px
+                    padding:  15px
+                    text-transform: uppercase
+                    &:hover
+                        box-shadow: 0 0 10px var(--verde)
+                        color: var(--verde)
+                        background: var(--textoInvertido)
             
 
 
