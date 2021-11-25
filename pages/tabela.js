@@ -263,6 +263,19 @@ export default function Usuarios(props) {
         Buscar()
     }
 
+    function resetForm(e){
+        e.preventDefault()
+        setId("")
+        setTitle("")
+        setStore("")
+        setProductId("")
+        setTabela([{ linha: ["", ""] }, { linha: ["", ""] }])
+        setButton("Adicionar")
+        setEdit(false)
+
+        Buscar()
+      }
+
     function ExpadirForm() {
         if (formExpand) {
             setFormExpand(false)
@@ -372,7 +385,7 @@ export default function Usuarios(props) {
                                     return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
                                 })}
                             </select>
-                            <input name={"productId"} value={productId} placeholder={"ID do Produto"} onChange={(e) => setProductId(e.target.value)} />
+                            <input name={"productId"} required={ true } value={productId} placeholder={"ID do Produto"} onChange={(e) => setProductId(e.target.value)} />
                             <input name={"title"} value={title} placeholder={"Titulo da Tabela"} onChange={(e) => setTitle(e.target.value)} />
                             {/* Inicio Tabelas */}
 
@@ -396,47 +409,31 @@ export default function Usuarios(props) {
                                                         onChange={(e) => editColumn(e, indexRow, indexColumn)} />
                                                     {indexColumn == colunas - 1 && colunas < 8 && indexRow == 0 ?
                                                         <button className="add column" onClick={(e) => addColumn()} type="button">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41" >
-                                                                <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                                                                    <text id="_" data-name="+" transform="translate(14984 -821)" strokeWidth="0" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-                                                                    <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" strokeWidth="2">
-                                                                        <circle cx="20" cy="20" r="20" stroke="none" />
-                                                                        <circle cx="20" cy="20" r="19" fill="none" />
-                                                                    </g>
-                                                                </g>
-                                                            </svg>
+                                                            <div>
+                                                                +
+                                                            </div>
                                                         </button>
                                                         : null
                                                     }
                                                     {(indexColumn == colunas - 1 && colunas == 8) ?
                                                         <button className="add column" onClick={(e) => removeColumn()} type="button">
                                                             {indexRow == 0 ? 
-                                                            <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41" >
-                                                                <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                                                                    <text id="_" data-name="+" transform="translate(14987 -821)" strokeWidth="0" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">-</tspan></text>
-                                                                    <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" strokeWidth="2">
-                                                                        <circle cx="20" cy="20" r="20" stroke="none" />
-                                                                        <circle cx="20" cy="20" r="19" fill="none" />
-                                                                    </g>
-                                                                </g>
-                                                            </svg>
+                                                            <div>
+                                                                -
+                                                            </div>
                                                             : null}
                                                         </button>
-                                                        : indexColumn == colunas - 1 && colunas < 8 && colunas > 2 && indexRow > 0 ?
+                                                        : indexColumn == colunas - 1 && colunas < 8  && indexRow > 0 ?
                                                             <>
                                                                 <button className="add column" onClick={(e) => removeColumn()} type="button">
-                                                                    {indexRow == 1 ? 
-
-                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41" >
-                                                                            <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                                                                                <text id="_" data-name="+" transform="translate(14987 -821)" strokeWidth="0" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">-</tspan></text>
-                                                                                <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" strokeWidth="2">
-                                                                                    <circle cx="20" cy="20" r="20" stroke="none" />
-                                                                                    <circle cx="20" cy="20" r="19" fill="none" />
-                                                                                </g>
-                                                                            </g>
-                                                                        </svg>
-                                                                    :null }
+                                                                    {colunas > 2 && indexRow == 1
+                                                                    ?
+                                                                        <div>
+                                                                            -
+                                                                        </div>
+                                                                    : null
+                                                                    }
+                                                                    
                                                                 </button>
                                                             </>
                                                             : null
@@ -449,27 +446,15 @@ export default function Usuarios(props) {
                                             <div className="row">
 
                                                 <button className="add row" onClick={(e) => addRow()} type="button">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
-                                                        <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                                                            <text id="_" data-name="+" transform="translate(14984 -821)" strokeWidth="0" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">+</tspan></text>
-                                                            <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" strokeWidth="2">
-                                                                <circle cx="20" cy="20" r="20" stroke="none" />
-                                                                <circle cx="20" cy="20" r="19" fill="none" />
-                                                            </g>
-                                                        </g>
-                                                    </svg>
+                                                    <div>
+                                                        +
+                                                    </div>
                                                 </button>
                                                 {indexRow == linhas - 1 && linhas > 2 ?
                                                     <button className="add row" onClick={(e) => removeRow()} type="button">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="41" viewBox="0 0 40 41">
-                                                            <g id="Grupo_119" data-name="Grupo 119" transform="translate(-14973 852)">
-                                                                <text id="_" data-name="+" transform="translate(14987 -821)" strokeWidth="0" fontSize="30" fontFamily="Roboto-Regular, Roboto" letterSpacing="0.02em"><tspan x="0" y="0">-</tspan></text>
-                                                                <g id="Elipse_2" data-name="Elipse 2" transform="translate(14973 -851)" fill="none" strokeWidth="2">
-                                                                    <circle cx="20" cy="20" r="20" stroke="none" />
-                                                                    <circle cx="20" cy="20" r="19" fill="none" />
-                                                                </g>
-                                                            </g>
-                                                        </svg>
+                                                        <div>
+                                                            -
+                                                        </div>
                                                     </button>
                                                     : null
                                                 }
@@ -483,7 +468,17 @@ export default function Usuarios(props) {
                             </div>
                             {/* Fim Tabelas */}
 
-                            <button type="submit">{button}</button>
+                            <div className="actions">
+                                <button type="submit">{ button }</button>
+                                <button className="cancelar" onClick={ (e) => resetForm(e)}>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="19.092" height="19.092" viewBox="0 0 19.092 19.092">
+                                        <g id="Grupo_459" data-name="Grupo 459" transform="translate(-16105.954 -28.454)">
+                                        <rect id="Retângulo_836" data-name="Retângulo 836" width="25" height="2" rx="1" transform="translate(16107.368 28.454) rotate(45)" fill="#ff4c34"/>
+                                        <rect id="Retângulo_838" data-name="Retângulo 838" width="25" height="2" rx="1" transform="translate(16105.954 46.132) rotate(-45)" fill="#ff4c34"/>
+                                        </g>
+                                    </svg>
+                                </button>
+                            </div>
                         </form>
                     </div>
                 </div>

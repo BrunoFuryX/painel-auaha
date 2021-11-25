@@ -14,7 +14,7 @@ import { async } from '@firebase/util';
 
 export default function Usuarios(props) {
   const user = props.user
-  const [dark, setDark] = useState(props.dark)
+  var dark = props.dark ? props.dark : true
 
   const [ search, setSearch] = useState("")
   const [ searchCampo, setSearchCampo] = useState(false)

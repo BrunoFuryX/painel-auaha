@@ -13,7 +13,7 @@ import { async } from '@firebase/util';
 
 export default function Lojas(props) {
   const user = props.user
-  var dark = props.dark
+  var dark = props.dark ? props.dark : true
 
   const [edit, setEdit] = useState(false)
 
@@ -406,6 +406,7 @@ export default function Lojas(props) {
                   <input name={ "StorePayDay" } value={ form.StorePayDay } className="data" placeholder={ "DD/MM/AAAA" } onChange={handleChange } onKeyUp={  (e) => { FormatDate(e) }}/>
                   <input name={ "StoreURL" } value={ form.StoreURL } placeholder={ "Url da loja" }  onChange={handleChange} />
                   <select name={ "StorePlataform" } value={ form.StorePlataform } onChange={handleChange} >
+                    <option value={""} disabled={true}>Plataforma</option>
                     <option value={ "Tray" }>Tray</option>
                     <option value={ "Vtex" }>Vtex</option>
                     <option value={ "Jet" }>Jet</option>

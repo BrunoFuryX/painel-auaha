@@ -408,10 +408,15 @@ export default function Modelos(props) {
               <form onSubmit={ e => enviarForm(e) }>
                   <input type="hidden" name={ "id" } value={ form.id }/>
                   <select name={ "loja" } value={ user.store ? user.store : form.loja } readOnly={ user.store ? true : false }  onChange={handleChange}>
-                    <option value={ "" }>Auaha</option>
+                    <option value={""} disabled={true}>Loja</option>
                     {lojas.map(element => {
-
-                      return( <option key={element.id} value={ element.id }> {element.StoreName} </option> )
+                        if(user.store){
+                            if(user.store == element.id){
+                                return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
+                            }
+                        }else{
+                            return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
+                        }
                     })}
                   </select>
                   <input name={ "productId" } value={ form.productId }  placeholder={ "Id do Produto" } required="true" onChange={handleChange}/>
@@ -479,7 +484,9 @@ export default function Modelos(props) {
                       
                     </label>
                   </div>
-                  <button type="submit">{ button }</button>
+                  <div className="actions">
+                    <button type="submit">{ button }</button>
+                  </div>
               </form>
           </div>
         </div>

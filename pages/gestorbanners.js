@@ -3,9 +3,9 @@ import Image from 'next/image'
 import React, { useEffect, useState } from 'react';
 import ImagemUsuario from "/public/images/ImagemUsuario.svg"
 import { getUserbyId, getUsersbyOrder, setUser, deleteUser, getUsersbyWhere, getUsers } from '/public/services/usuarios';
-import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores } from '/public/services/lojas';
+import { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores,getStoresbyWherewithCondition } from '/public/services/lojas';
 import { getArquivobyWhere, getArquivos, getArquivoById, getArquivosbyOrder, setArquivo, deleteArquivo } from '/public/services/banners';
-import { getStorage, ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { getStorage, ref, uploadBytesResumable, getDownloadURL,deleteObject  } from 'firebase/storage';
 import $ from 'jquery'
 import { FaAngleDown, FaAngleUp, FaRegTimesCircle } from "react-icons/fa";
 
@@ -21,7 +21,7 @@ import { async } from '@firebase/util';
 
 export default function Modelos(props) {
     const user = props.user
-    var dark = props.dark
+    var dark = props.dark ? props.dark : true
     const [edit, setEdit] = useState(false)
 
     const [formExpand, setFormExpand] = useState(false)
@@ -49,7 +49,7 @@ export default function Modelos(props) {
 
     useEffect(() => {
 
-        getStoresbyWhere("StorePlataform", "MercadoShops").then((response) => {
+        getStoresbyWherewithCondition("BannersMercado",">" ,"0").then((response) => {
             setTimeout(() => {
                 setLojas(response)
 
@@ -139,18 +139,35 @@ export default function Modelos(props) {
             [name]: value
         }));
     };
-    function RemoveBanner(index){
+    function ExcIMG(index){
         var aux = form
+        // Create a reference to the file to delete
+        const desertRef = ref(storage, aux.image[index].caminho);
+        deleteObject(desertRef).then(() => {
+            aux.image[index] = {
+                caminho: "",
+                url: "",
+                title: ""
+            }
+            setForm(aux);
+            enviarForm()
+        }).catch((error) => {
+            aux.image[index] = {
+                caminho: "",
+                url: "",
+                title: ""
+            }
+            setForm(aux);
+            enviarForm()
+        });
+    }
+    function RemoveBanner(e, index){
+        e.preventDefault()
 
-        aux.image[index] = {
-            caminho: "",
-            url: "",
-            title: ""
-        }
-
-        setForm(aux);
-
-        enviarForm()
+        setMsg(`Deseja excluir o Banner ${index + 1}?`)
+        setConfirm(true)
+        setPreview(form.image[index].url)
+        setX(index)
     }
     const BannerItem = (props) => {
         var i = props.i
@@ -158,7 +175,7 @@ export default function Modelos(props) {
             <div className="banner__item" key={"banner" + i}>
                 <div className="name">
                     <h3>Banner {i + 1}</h3>
-                    <button onClick={() => RemoveBanner(props.i) }>
+                    <button onClick={(e) => RemoveBanner(e, props.i) }>
                         {form.image[i].url ? <FaRegTimesCircle /> : null }
                     </button>
                 </div>
@@ -340,7 +357,13 @@ export default function Modelos(props) {
                             <select name={"loja"} value={user.store ? user.store : form.loja} readOnly={user.store ? true : false} type={user.store ? "hidden" : "text"} onChange={handleChange}>
                                 <option value={""} disabled={true}>Selecione a Loja</option>
                                 {lojas.map(element => {
-                                    return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
+                                    if(user.store){
+                                        if(user.store == element.id){
+                                            return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
+                                        }
+                                    }else{
+                                        return (<option key={element.id} value={element.id}> {element.StoreName} </option>)
+                                    }
                                 })}
                             </select>
                             <div className="banners__list">
@@ -377,7 +400,7 @@ export default function Modelos(props) {
                                     <button className={"aviso__cancel"} onClick={e => { setMsg(`Registro não foi excluido`); setConfirm(false); setX(false) }}>
                                         Cancelar
                                     </button>
-                                    <button className={"aviso__confirm"} onClick={e => { setMsg(`Registro excluido`); deleteArquivo(x); setX(false); setConfirm(false); }}>
+                                    <button className={"aviso__confirm"} onClick={e => { setMsg(`Registro excluido`); ExcIMG(x); setX(false); setConfirm(false); }}>
                                         Confirmar
                                     </button>
                                 </>

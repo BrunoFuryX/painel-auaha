@@ -31,7 +31,7 @@
         &.tabela
             form
                 display: grid
-                grid-template-columns: repeat(3, 1fr) 160px;
+                grid-template-columns: repeat(3, 1fr) 200px;
                 grid-template-rows: 50px 1fr;
                 grid-column-gap: 20px;
                 grid-row-gap: 20px;
@@ -64,6 +64,18 @@
                     padding: 0
                     fill var(--verde)
                     stroke var(--verde)
+                    
+                    > div
+                        color: var(--verde)
+                        width: 36px
+                        height: 36px
+                        border-radius: 50%
+                        border: 2px solid var(--verde)
+                        display: flex
+                        align-items: center
+                        justify-content: center
+                        font-size: 30px
+
                 .row
                     display: flex
                     gap: 20px
@@ -120,7 +132,6 @@
                 grid-area: 2 / 4 / 4 / 6;
                 display: flex
                 flex-wrap: wrap
-                justify-content: center
                 align-items: center
                 gap: 10px
                 background: var(--bg)
@@ -129,6 +140,8 @@
                 max-width: 1200px
                 box-sizing: border-box;
                 padding: 15px 30px
+                @media (min-width 1300px)
+                    justify-content: center
             
                 @media (max-width 1300px)
                     padding: 15px 10px
@@ -278,6 +291,8 @@
             display: flex
             flex-wrap: wrap
             gap: 30px
+            @media (max-width: 991px)
+                justify-content: center
             .banner__item
 
                 flex: 1 1 240px

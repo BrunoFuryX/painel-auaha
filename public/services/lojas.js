@@ -63,6 +63,20 @@ const getStoresbyWhere = async (campo, valor) => {
 
     return response
 }
+const getStoresbyWherewithCondition = async (campo,cond, valor) => {
+    const querySnapshot = await getDocs(query(storesRef, where(campo, cond, valor)));
+
+    var response = []
+
+    querySnapshot.forEach((doc) => {
+        // doc.data() is never undefined for query doc snapshots
+        response.push(
+            doc.data()
+        );
+    });
+
+    return response
+}
 
 const getRecentStores = async ( valor) => {
     const querySnapshot = await getDocs(query(storesRef, limit(4)));
@@ -101,4 +115,4 @@ const deleteStore = async (id) => {
     return { msg: "pronto"}
 }
 
-export { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores }
+export { getStorebyId, getStoresbyOrder, setStore, deleteStore, getStoresbyWhere, getStores, getRecentStores,getStoresbyWherewithCondition }

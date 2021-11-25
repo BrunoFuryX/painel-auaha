@@ -16,7 +16,7 @@ import { async } from '@firebase/util';
 
 export default function Usuarios(props) {
   const user = props.user
-  var dark = props.dark
+  var dark = props.dark ? props.dark : true
   const [edit, setEdit] = useState(false)
 
   const [formExpand, setFormExpand] = useState(false)
@@ -235,7 +235,7 @@ export default function Usuarios(props) {
     }
 
     if (id) {
-      setMsg(`Registro ${id} editado com sucesso`)
+      setMsg(`Registro editado com sucesso`)
       setConfirm(false)
       setPreview(false)
       var infos =

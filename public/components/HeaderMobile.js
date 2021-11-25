@@ -146,6 +146,7 @@ export default function HeaderMobile(props) {
     function toggleMenu() {
         if (menuActive == true) {
             setMenuActive(false)
+            
         } else {
             setMenuActive(true)
         }
@@ -168,7 +169,7 @@ export default function HeaderMobile(props) {
                 menuActive1
                     ?
                     <>
-                        <button className={"toggleMenu1"} onClick={() => setMenuActive1(false)}>
+                        <button className={"toggleMenu1"} onClick={() => {setMenuActive1(false); setMenuActive2(false)}}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="19.092" height="19.092" viewBox="0 0 19.092 19.092">
                                 <g id="Grupo_459" data-name="Grupo 459" transform="translate(-16105.954 -28.454)">
                                     <rect id="Retângulo_836" data-name="Retângulo 836" width="25" height="2" rx="1" transform="translate(16107.368 28.454) rotate(45)" fill="#4cffde" />
@@ -179,7 +180,7 @@ export default function HeaderMobile(props) {
                     </>
                     :
                     <>
-                        <button className={"toggleMenu1"} onClick={() => setMenuActive1(true)}>
+                        <button className={"toggleMenu1"} onClick={() =>  {setMenuActive1(true); setMenuActive2(false)}}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="18" viewBox="0 0 25 18">
                                 <g id="Grupo_452" data-name="Grupo 452" transform="translate(-12 -31)">
                                     <rect id="Retângulo_836" data-name="Retângulo 836" width="25" height="2" rx="1" transform="translate(12 31)" fill="#4cffde" />
@@ -195,7 +196,7 @@ export default function HeaderMobile(props) {
                 menuActive2
                     ?
                     <>
-                        <button className={"toggleMenu2"} onClick={() => setMenuActive2(false)}>
+                        <button className={"toggleMenu2"} onClick={() =>  {setMenuActive1(false); setMenuActive2(false)}}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="19.092" height="19.092" viewBox="0 0 19.092 19.092">
                                 <g id="Grupo_459" data-name="Grupo 459" transform="translate(-16105.954 -28.454)">
                                     <rect id="Retângulo_836" data-name="Retângulo 836" width="25" height="2" rx="1" transform="translate(16107.368 28.454) rotate(45)" fill="#4cffde" />
@@ -206,7 +207,7 @@ export default function HeaderMobile(props) {
                     </>
                     :
                     <>
-                        <button className={"toggleMenu2"} onClick={() => setMenuActive2(true)}>
+                        <button className={"toggleMenu2"} onClick={() =>  {setMenuActive1(false); setMenuActive2(true)}}>
                             {user.foto ?
                                 <Image src={user.foto ? user.foto : ImagemUsuario} width={49} height={49} />
 
