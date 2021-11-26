@@ -292,7 +292,6 @@ export default function Usuarios(props) {
         var column = newarray[0].linha.length
 
         for(var i=0; i < lines; i++){
-            console.log(i, "Index")
             newarray[i].linha[column] = ""
         }
         setTabela(newarray)
@@ -307,7 +306,6 @@ export default function Usuarios(props) {
         var column = newarray[0].linha.length
 
         for(var i=0; i < lines; i++){
-            console.log(i, "Index")
             newarray[i].linha.splice(column - 1, 1)
         }
         
