@@ -288,9 +288,12 @@ export default function Usuarios(props) {
 
     function addColumn() {
         var newarray = tabela
+        var lines = newarray.length
+        var column = newarray[0].linha.length
 
-        for(var i=0; i < newarray.length; i++){
-            newarray[i].linha.push("")
+        for(var i=0; i < lines; i++){
+            console.log(i, "Index")
+            newarray[i].linha[column] = ""
         }
         setTabela(newarray)
         setTabela((prevArray) => [
@@ -300,14 +303,17 @@ export default function Usuarios(props) {
 
     function removeColumn() {
         var newarray = tabela
+        var lines = newarray.length
+        var column = newarray[0].linha.length
 
-        for(var i=0; i < newarray.length; i++){
-            newarray[i].linha.pop()
+        for(var i=0; i < lines; i++){
+            console.log(i, "Index")
+            newarray[i].linha.splice(column - 1, 1)
         }
+        
         setTabela(newarray)
         setTabela((prevArray) => [
           ...prevArray,
-          
         ])
     }
     function addRow() {
