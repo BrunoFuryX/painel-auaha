@@ -4,13 +4,13 @@ import * as firebase from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyALljewFZEYZH-r8PsZ8vHvOkMy7AK8RNk",
-  authDomain: "auaha-ferramenta.firebaseapp.com",
-  databaseURL: "https://auaha-ferramenta-default-rtdb.firebaseio.com",
-  projectId: "auaha-ferramenta",
-  storageBucket: "auaha-ferramenta.appspot.com",
-  messagingSenderId: "521719919246",
-  appId: "1:521719919246:web:b6cf5d005ba4cd36454fdf"
+  apiKey: "",
+  authDomain: "",
+  databaseURL: "",
+  projectId: "",
+  storageBucket: "",
+  messagingSenderId: "",
+  appId: ""
 };
 
 // Initialize Firebase
